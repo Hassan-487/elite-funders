@@ -18,6 +18,7 @@ import BuisnessDetail from "./pages/BuisnessDetails"
 import Signature from "./pages/Signature"
 import DocumentUpload from "./pages/DocumentUpload"
 import ApplicationRejection from "./pages/ApplicationRejection"
+import ThankYou from "./pages/Thankyou";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
               <Route path="/apply/signature" element={<Signature />} />
               <Route path="/apply/doc-upload" element={<DocumentUpload />} />
             <Route path="/apply/rejected" element={<ApplicationRejection />} />
+            <Route path="/apply/thank-you" element={<ThankYou />} />
           </Routes>
         </div>
       </main>
