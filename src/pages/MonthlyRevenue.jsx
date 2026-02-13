@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft,ArrowRight, DollarSign } from "lucide-react";
+import { useFormStore } from "@/store"; 
+import ProgressBar from "@/components/ProgressBar";
 
 export default function MonthlyRevenue() {
+  const { monthlyRevenue, setStepData } = useFormStore();
+  
   const navigate = useNavigate();
-  const [selected, setSelected] = useState("Less than $20,000");
-
+ const [selected, setSelected] = useState(
+    monthlyRevenue?.range ?? "Less than $20,000"
+  );
   const options = [
     "Less than $20,000",
     "$20,000 - $50,000",
@@ -15,30 +20,18 @@ export default function MonthlyRevenue() {
     "$500,000 +",
   ];
 
+  // Save to store
+  useEffect(() => {
+    setStepData("monthlyRevenue", { range: selected });
+  }, [selected, setStepData]);
+useEffect(() => {
+    console.log("ZUSTAND → monthlyRevenue slice:", monthlyRevenue);
+  }, [monthlyRevenue]);
+
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-2 sm:px-4">
 
-      {/* Progress */}
-      <div className="w-full max-w-3xl mb-8 sm:mb-10">
-        <div className="flex justify-between text-xs sm:text-sm mb-2">
-          <div className="text-gray-500">
-            Step <span className="text-blue-600">5</span> of 15
-          </div>
-          <div className="text-blue-600">36%</div>
-        </div>
-
-        <div className="flex gap-2">
-          {Array.from({ length: 15 }).map((_, i) => (
-            <div
-              key={i}
-              className={`flex-1 h-2 rounded-full ${
-                i < 5 ? "bg-blue-600" : "bg-blue-100"
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-
+     <ProgressBar currentStep={5} totalSteps={13} />
       {/* Card */}
       <div className="w-full max-w-2xl bg-white shadow-lg border border-gray-100 rounded-2xl p-6 sm:p-10">
 

@@ -1,74 +1,77 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   ArrowRight,
-   BriefcaseMedical ,
-  TrafficCone ,
-  Dices ,
+  BriefcaseMedical,
+  TrafficCone,
+  Dices,
   Factory,
-  ShoppingBag ,
+  ShoppingBag,
   HeartHandshake,
   User,
   HeartPulse,
   Cpu,
   Building2,
-  Gavel ,
+  Gavel,
   Truck,
-  UtensilsCrossed ,
+  UtensilsCrossed,
   Hotel,
   MoreHorizontal,
 } from "lucide-react";
+import { useFormStore } from "@/store"; 
+import ProgressBar from "@/components/ProgressBar";
+
 
 export default function BusinessIndustry() {
   const navigate = useNavigate();
-  const [selected, setSelected] = useState("Beauty, Wellness & Fitness");
+
+  const { businessIndustry, setStepData } = useFormStore();
+
+
+  const [selected, setSelected] = useState(
+    businessIndustry?.industry ?? "Beauty, Wellness & Fitness"
+  );
 
   const industries = [
-    { label: "Beauty, Wellness & Fitness", icon: HeartPulse  },
-    { label: "Construction & Contracting", icon: TrafficCone  },
-    { label: "Entertainment & Media", icon: Dices  },
+    { label: "Beauty, Wellness & Fitness", icon: HeartPulse },
+    { label: "Construction & Contracting", icon: TrafficCone },
+    { label: "Entertainment & Media", icon: Dices },
     { label: "Manufacturing & Distribution", icon: Factory },
-    { label: "Retail & E-Commerce", icon: ShoppingBag  },
+    { label: "Retail & E-Commerce", icon: ShoppingBag },
     { label: "Nonprofit Organizations", icon: HeartHandshake },
     { label: "Personal Services", icon: User },
-    { label: "Healthcare & Medical", icon: BriefcaseMedical  },
+    { label: "Healthcare & Medical", icon: BriefcaseMedical },
     { label: "Technology & IT Services", icon: Cpu },
     { label: "Real Estate", icon: Building2 },
-    { label: "Professional Services(Legal,Accounting)", icon: Gavel  },
+    { label: "Professional Services (Legal, Accounting)", icon: Gavel },
     { label: "Transportation & Logistics", icon: Truck },
-    { label: "Restaurants & Food Services", icon: UtensilsCrossed  },
+    { label: "Restaurants & Food Services", icon: UtensilsCrossed },
     { label: "Hospitality & Tourism", icon: Hotel },
     { label: "Others", icon: MoreHorizontal },
   ];
 
+  
+  useEffect(() => {
+    setStepData("businessIndustry", { industry: selected });
+  }, [selected, setStepData]);
+
+  
+     // DEBUG LOG
+  
+  useEffect(() => {
+    console.log(
+      "ZUSTAND → businessIndustry slice:",
+      businessIndustry
+    );
+  }, [businessIndustry]);
+
   return (
-<div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-3 sm:px-4 pb-24 sm:pb-32">
-
-      {/* Progress */}
-      <div className="w-full max-w-3xl mb-8">
-        <div className="flex justify-between text-xs sm:text-sm mb-2">
-          <div className="text-gray-500">
-            Step <span className="text-blue-600">7</span> of 15
-          </div>
-          <div className="text-blue-600">50%</div>
-        </div>
-
-        <div className="flex gap-2">
-          {Array.from({ length: 15 }).map((_, i) => (
-            <div
-              key={i}
-              className={`flex-1 h-2 rounded-full ${
-                i < 7 ? "bg-blue-600" : "bg-blue-100"
-              }`}
-            />
-          ))}
-        </div>
-      </div>
+    <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-3 sm:px-4 pb-24 sm:pb-32">
+     <ProgressBar currentStep={7} totalSteps={13} />
 
       {/* Card */}
       <div className="w-full max-w-3xl bg-white shadow-lg border border-gray-100 rounded-2xl p-6 sm:p-10">
-
         {/* Heading */}
         <div className="text-center mb-8">
           <h2 className="text-xl sm:text-2xl font-bold text-indigo-900 mb-2">
@@ -103,7 +106,9 @@ export default function BusinessIndustry() {
 
               <span
                 className={`text-xs sm:text-sm font-medium text-center leading-tight ${
-                  selected === label ? "text-indigo-900" : "text-gray-500"
+                  selected === label
+                    ? "text-indigo-900"
+                    : "text-gray-500"
                 }`}
               >
                 {label}
@@ -123,17 +128,14 @@ export default function BusinessIndustry() {
           </button>
 
           <button
-  onClick={() => navigate("/apply/funding-purpose")}
-  className="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition"
->
-  Next
-  <ArrowRight className="w-4 h-4" />
-</button>
+            onClick={() => navigate("/apply/funding-purpose")}
+            className="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition"
+          >
+            Next
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
-
       </div>
-
-     
     </div>
   );
 }

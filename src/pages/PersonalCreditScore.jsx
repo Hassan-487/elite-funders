@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -10,10 +10,15 @@ import {
   AlertTriangle,
   AlertCircle,
 } from "lucide-react";
+import { useFormStore } from "@/store"; 
+import ProgressBar from "@/components/ProgressBar";
 
 export default function PersonalCreditScoreStep() {
+  const {personalCreditScore, setStepData } = useFormStore();
   const navigate = useNavigate();
-  const [selected, setSelected] = useState("Excellent (720+)");
+  const [selected, setSelected] = useState(
+    personalCreditScore?.range ?? "Excellent (720+)"
+  );
 
   const options = [
     { label: "Excellent (720+)", icon: BadgeCheck },
@@ -24,28 +29,22 @@ export default function PersonalCreditScoreStep() {
     { label: "Poor (Below 550)", icon: AlertCircle },
   ];
 
+useEffect(()=>{
+  setStepData("personalCreditScore", { range: selected });
+
+},[selected, setStepData]);
+
+ useEffect(() => {
+    console.log(
+      "ZUSTAND → personalCreditScore slice:",
+      personalCreditScore
+    );
+  }, [personalCreditScore]);
+  
+
   return (
 <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-3 sm:px-4 pb-24 sm:pb-32">
-      {/* Progress */}
-      <div className="w-full max-w-3xl mb-8">
-        <div className="flex justify-between text-xs sm:text-sm mb-2">
-          <div className="text-gray-500">
-            Step <span className="text-blue-600">6</span> of 15
-          </div>
-          <div className="text-blue-600">43%</div>
-        </div>
-
-        <div className="flex gap-2">
-          {Array.from({ length: 15 }).map((_, i) => (
-            <div
-              key={i}
-              className={`flex-1 h-2 rounded-full ${
-                i < 6 ? "bg-blue-600" : "bg-blue-100"
-              }`}
-            />
-          ))}
-        </div>
-      </div>
+    <ProgressBar currentStep={6} totalSteps={13} />
 
       {/* Card */}
       <div className="w-full max-w-2xl bg-white shadow-lg border border-gray-100 rounded-2xl p-6 sm:p-10">

@@ -1,40 +1,46 @@
-import { useState } from "react";
+
+
+
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft,ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useFormStore } from "@/store";
+import ProgressBar from "@/components/ProgressBar";
 
 export default function NewApplicationStep1() {
   const navigate = useNavigate();
-  const [amount, setAmount] = useState(25000);
 
-  const presetAmounts = [25000, 50000, 100000, 150000, 250000, 500000];
+  const { newApplication, setStepData } = useFormStore();
+
+  // Load saved value from store
+  const [amount, setAmount] = useState(
+    newApplication?.amount ?? 25000
+  );
+
+  const presetAmounts = [
+    25000,
+    50000,
+    100000,
+    150000,
+    250000,
+    500000,
+  ];
+
+  // Save to store whenever amount changes
+  useEffect(() => {
+    setStepData("newApplication", { amount });
+  }, [amount, setStepData]);
+// 🔍 DEBUG: log when store updates
+useEffect(() => {
+  console.log("ZUSTAND → newApplication slice:", newApplication);
+}, [newApplication]);
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-2 sm:px-4">
-
-      {/* Progress */}
-      <div className="w-full max-w-3xl mb-8 sm:mb-10">
-        <div className="flex justify-between text-xs sm:text-sm mb-2">
-          <div className="text-gray-500">
-            Step <span className="text-blue-600">1</span> of 15
-          </div>
-          <div className="text-blue-600">1%</div>
-        </div>
-
-        <div className="flex gap-2">
-          {Array.from({ length: 15 }).map((_, i) => (
-            <div
-              key={i}
-              className={`flex-1 h-2 rounded-full ${
-                i === 0 ? "bg-blue-600" : "bg-blue-100"
-              }`}
-            />
-          ))}
-        </div>
-      </div>
+     <ProgressBar currentStep={1} totalSteps={13} />
 
       {/* Card */}
       <div className="w-full max-w-2xl bg-white shadow-lg border border-gray-100 rounded-2xl p-6 sm:p-10">
-
         {/* Heading */}
         <div className="text-center mb-6 sm:mb-8">
           <h2 className="text-xl sm:text-2xl font-bold text-indigo-900 mb-2">
@@ -82,7 +88,6 @@ export default function NewApplicationStep1() {
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 sm:justify-between">
-
           <button
             onClick={() => navigate(-1)}
             className="flex items-center justify-center gap-2 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition"
@@ -91,17 +96,14 @@ export default function NewApplicationStep1() {
             Back
           </button>
 
-  <button
-  onClick={() => navigate("/apply/business-type")}
-  className="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition"
->
-  Next
-  <ArrowRight className="w-4 h-4 text-white flex-shrink-0" />
-</button>
-
-
+          <button
+            onClick={() => navigate("/apply/business-type")}
+            className="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition"
+          >
+            Next
+            <ArrowRight className="w-4 h-4 text-white flex-shrink-0" />
+          </button>
         </div>
-
       </div>
     </div>
   );

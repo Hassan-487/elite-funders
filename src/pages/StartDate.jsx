@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft,ArrowRight, CalendarDays } from "lucide-react";
+import { ArrowLeft, ArrowRight, CalendarDays } from "lucide-react";
+import { useFormStore } from "@/store"; // or ../store if no alias
+import ProgressBar from "@/components/ProgressBar";
 
 export default function BusinessStartDateStep() {
   const navigate = useNavigate();
-  const [selected, setSelected] = useState("6-9 Months");
+
+  const { startDate, setStepData } = useFormStore();
+
+  // Load from store safely
+  const [selected, setSelected] = useState(
+    startDate?.range ?? "6-9 Months"
+  );
 
   const options = [
     "0-3 Months",
@@ -14,33 +22,26 @@ export default function BusinessStartDateStep() {
     "More Than 1 year",
   ];
 
+  /* =====================
+      SAVE TO STORE
+  ===================== */
+  useEffect(() => {
+    setStepData("startDate", { range: selected });
+  }, [selected, setStepData]);
+
+  /* =====================
+      DEBUG LOG
+  ===================== */
+  useEffect(() => {
+    console.log("ZUSTAND → startDate slice:", startDate);
+  }, [startDate]);
+
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-2 sm:px-4">
-
-      {/* Progress */}
-      <div className="w-full max-w-3xl mb-8 sm:mb-10">
-        <div className="flex justify-between text-xs sm:text-sm mb-2">
-          <div className="text-gray-500">
-            Step <span className="text-blue-600">4</span> of 15
-          </div>
-          <div className="text-blue-600">27%</div>
-        </div>
-
-        <div className="flex gap-2">
-          {Array.from({ length: 15 }).map((_, i) => (
-            <div
-              key={i}
-              className={`flex-1 h-2 rounded-full ${
-                i < 4 ? "bg-blue-600" : "bg-blue-100"
-              }`}
-            />
-          ))}
-        </div>
-      </div>
+     <ProgressBar currentStep={4} totalSteps={13} />
 
       {/* Card */}
       <div className="w-full max-w-2xl bg-white shadow-lg border border-gray-100 rounded-2xl p-6 sm:p-10">
-
         {/* Heading */}
         <div className="text-center mb-6 sm:mb-10">
           <h2 className="text-xl sm:text-2xl font-bold text-indigo-900 mb-2">
@@ -90,15 +91,14 @@ export default function BusinessStartDateStep() {
             Back
           </button>
 
-           <button
-  onClick={() => navigate("/apply/monthly-revenue")}
-  className="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition"
->
-  Next
-  <ArrowRight className="w-4 h-4" />
-</button>
+          <button
+            onClick={() => navigate("/apply/monthly-revenue")}
+            className="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition"
+          >
+            Next
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
-
       </div>
     </div>
   );
