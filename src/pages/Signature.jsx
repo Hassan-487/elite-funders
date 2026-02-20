@@ -1,4 +1,7 @@
-import { useRef, useState, useEffect } from "react";
+
+
+
+import { useRef, useState, useEffect, use } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import SignatureCanvas from "react-signature-canvas";
@@ -8,8 +11,8 @@ import ProgressBar from "@/components/ProgressBar";
 export default function Signature() {
   const navigate = useNavigate();
   const sigRef = useRef(null);
-  const { signature, setStepData } = useFormStore();
 
+  const { signature, setStepData } = useFormStore();
 
   const [mode, setMode] = useState(signature?.mode ?? "type");
   const [typedName, setTypedName] = useState(signature?.typedName ?? "");
@@ -17,25 +20,26 @@ export default function Signature() {
     signature?.drawnSignature ?? null
   );
 
-  /* =====================
-      SAVE TO STORE
-  ===================== */
+  
   useEffect(() => {
     setStepData("signature", {
       mode,
-      typedName,
-      drawnSignature,
+      typedName: typedName || null,
+      drawnSignature: drawnSignature || null,
+      finalSignature:
+        typedName?.trim()
+          ? typedName
+          : drawnSignature
+          ? drawnSignature
+          : null,
     });
   }, [mode, typedName, drawnSignature, setStepData]);
 
-  
-  useEffect(() => {
-    console.log("ZUSTAND → signature slice:", signature);
-  }, [signature]);
+  //  useEffect(() => {
+  //   console.log("ZUSTAND → signature slice:", signature);
+  // }, [signature]);
 
-  /* =====================
-      HELPERS
-  ===================== */
+
   const clearSignature = () => {
     if (mode === "draw") {
       sigRef.current?.clear();
@@ -46,19 +50,18 @@ export default function Signature() {
   };
 
   const saveDrawnSignature = () => {
-    if (!sigRef.current.isEmpty()) {
+    if (sigRef.current && !sigRef.current.isEmpty()) {
       setDrawnSignature(sigRef.current.toDataURL());
+
+      // user ACTUALLY drew → invalidate typed signature
+      setTypedName("");
     }
   };
 
-  
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-20 px-4 pb-40">
-      {/* Progress */}
-      <ProgressBar currentStep={12} totalSteps={13} />
-      
+      <ProgressBar currentStep={14} totalSteps={15} />
 
-      {/* Card */}
       <div className="w-full max-w-2xl bg-white shadow-lg border border-gray-100 rounded-3xl p-6 sm:p-10">
         <h2 className="text-2xl font-bold text-center text-indigo-900">
           Signature
@@ -76,6 +79,7 @@ export default function Signature() {
           >
             Draw Signature
           </button>
+
           <button
             onClick={() => setMode("type")}
             className={`flex-1 py-3 ${
@@ -88,96 +92,99 @@ export default function Signature() {
           </button>
         </div>
 
-       
-{mode === "type" && (
-  <>
-    <input
-      type="text"
-      value={typedName}
-      onChange={(e) => setTypedName(e.target.value)}
-      placeholder="Type your full name"
-      className="w-full border rounded-lg px-4 py-4 text-center text-lg outline-none focus:ring-2 focus:ring-blue-500"
-    />
+        {/* TYPE MODE */}
+        {mode === "type" && (
+          <>
+            <input
+              type="text"
+              value={typedName}
+              onChange={(e) => {
+                const value = e.target.value;
+                setTypedName(value);
 
-    {/* PREVIEW */}
-    <div className="mt-6">
-      <h3 className="text-sm font-semibold text-gray-700 mb-2 text-center">
-        Signature Preview
-      </h3>
+                // user ACTUALLY typed → invalidate drawn signature
+                if (value.trim() !== "") {
+                  setDrawnSignature(null);
+                }
+              }}
+              placeholder="Type your full name"
+              className="w-full border rounded-lg px-4 py-4 text-center text-lg outline-none focus:ring-2 focus:ring-blue-500"
+            />
 
-      <div className="h-44 border rounded-xl flex items-center justify-center bg-gray-50">
-        {typedName ? (
-          <span
-            className="text-5xl text-green-600"
-            style={{ fontFamily: "'Bilbo Swash Caps', cursive" }}
-          >
-            {typedName}
-          </span>
-        ) : (
-          <span className="text-gray-400">
-            Your signature will appear here
-          </span>
+            <div className="mt-6">
+              <h3 className="text-sm font-semibold text-gray-700 mb-2 text-center">
+                Signature Preview
+              </h3>
+
+              <div className="h-44 border rounded-xl flex items-center justify-center bg-gray-50">
+                {typedName ? (
+                  <span
+                    className="text-5xl text-green-600"
+                    style={{ fontFamily: "'Bilbo Swash Caps', cursive" }}
+                  >
+                    {typedName}
+                  </span>
+                ) : (
+                  <span className="text-gray-400">
+                    Your signature will appear here
+                  </span>
+                )}
+              </div>
+            </div>
+          </>
         )}
-      </div>
-    </div>
-  </>
-)}
 
+        {/* DRAW MODE */}
+        {mode === "draw" && (
+          <>
+            <div className="border rounded-xl bg-gray-50">
+              <SignatureCanvas
+                ref={sigRef}
+                penColor="#10B981"
+                canvasProps={{
+                  width: 520,
+                  height: 200,
+                  className: "w-full h-48 rounded-xl",
+                }}
+                onEnd={saveDrawnSignature}
+              />
+            </div>
 
-     
-{mode === "draw" && (
-  <>
-    <div className="border rounded-xl bg-gray-50">
-      <SignatureCanvas
-        ref={sigRef}
-        penColor="#10B981"
-        canvasProps={{
-          width: 520,
-          height: 200,
-          className: "w-full h-48 rounded-xl",
-        }}
-        onEnd={saveDrawnSignature}
-      />
-    </div>
+            <div className="mt-6">
+              <h3 className="text-sm font-semibold text-gray-700 mb-2 text-center">
+                Signature Preview
+              </h3>
 
-    {/* PREVIEW */}
-    <div className="mt-6">
-      <h3 className="text-sm font-semibold text-gray-700 mb-2 text-center">
-        Signature Preview
-      </h3>
-
-      <div className="h-44 border rounded-xl flex items-center justify-center bg-white">
-        {drawnSignature ? (
-          <img
-            src={drawnSignature}
-            alt="Signature Preview"
-            className="h-32 object-contain"
-          />
-        ) : (
-          <span className="text-gray-400">
-            Your signature will appear here
-          </span>
+              <div className="h-44 border rounded-xl flex items-center justify-center bg-white">
+                {drawnSignature ? (
+                  <img
+                    src={drawnSignature}
+                    alt="Signature Preview"
+                    className="h-32 object-contain"
+                  />
+                ) : (
+                  <span className="text-gray-400">
+                    Your signature will appear here
+                  </span>
+                )}
+              </div>
+            </div>
+          </>
         )}
-      </div>
-    </div>
-  </>
-)}
-
 
         {/* Clear */}
-       <button
-  onClick={clearSignature}
-  className="mt-6 px-6 py-3 text-base font-medium text-blue-600 underline rounded-lg hover:bg-blue-50 transition"
->
-  Clear Signature
-</button>
+        <button
+          onClick={clearSignature}
+          className="mt-6 px-6 py-3 text-base font-medium text-blue-600 underline rounded-lg hover:bg-blue-50 transition"
+        >
+          Clear Signature
+        </button>
 
-
-        {/* Buttons */}
+        {/* Navigation */}
         <div className="flex flex-col sm:flex-row gap-4 sm:justify-between mt-10">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg"
+             className="flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-50 transition"
           >
             <ArrowLeft className="w-4 h-4" />
             Back
@@ -185,11 +192,10 @@ export default function Signature() {
 
           <button
             onClick={() => {
-              if (mode === "type" && !typedName) return;
-              if (mode === "draw" && !drawnSignature) return;
+              if (!typedName && !drawnSignature) return;
               navigate("/apply/doc-upload");
             }}
-            className="flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg"
+             className="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition"
           >
             Next
             <ArrowRight className="w-4 h-4" />

@@ -1,11 +1,13 @@
 import { Mail, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function ResumeApplication() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-24 px-4">
 
-      {/* Progress Section */}
-      <div className="w-full max-w-3xl mb-10">
+      
+      {/* <div className="w-full max-w-3xl mb-10">
         
         <div className="flex justify-between text-sm mb-2">
           <div className="text-gray-500">
@@ -14,7 +16,7 @@ export default function ResumeApplication() {
           <div className="text-blue-600">13%</div>
         </div>
 
-        {/* Progress Bars */}
+       
         <div className="flex gap-2">
           {Array.from({ length: 12 }).map((_, i) => (
             <div
@@ -25,7 +27,7 @@ export default function ResumeApplication() {
             />
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Card */}
       <div className="w-full max-w-2xl bg-white shadow-lg border border-gray-100 rounded-3xl p-10">
@@ -69,7 +71,7 @@ export default function ResumeApplication() {
         {/* Buttons */}
         <div className="flex justify-between items-center border-t pt-6">
 
-          <button className="flex items-center gap-2 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition">
+          <button className="flex items-center gap-2 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition" onClick={() => navigate(-1)}>
             <ArrowLeft className="w-4 h-4" />
             Back
           </button>

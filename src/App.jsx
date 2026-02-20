@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { useEffect } from "react";
+import { initGoogleAuth } from "@/utils/googleAuth";
 
 import Home from "./pages/Home";
 import ResumeApplication from "./pages/ResumeApplication";
@@ -19,15 +21,23 @@ import Signature from "./pages/Signature"
 import DocumentUpload from "./pages/DocumentUpload"
 import ApplicationRejection from "./pages/ApplicationRejection"
 import ThankYou from "./pages/Thankyou";
+import BuisnessOwner from "./pages/BuisnessOwnerInformation";
+import PreApproved from "./pages/Preapproved";
+import BuisnessName from "./pages/BuisnessName";
 
 function App() {
+  useEffect(() => {
+    initGoogleAuth()
+      .then(() => console.log("✅ Google Auth initialized"))
+      .catch((err) => console.error("❌ Google Auth failed", err));
+  }, []);
+  
   return (
     <div className="min-h-screen flex flex-col bg-white">
 
-      {/* Header stays full width */}
+      
       <Header />
 
-      {/* Main content */}
       <main className="flex-1">
         <div className="container">
           <Routes>
@@ -43,16 +53,19 @@ function App() {
              <Route path="/apply/funding-purpose" element={<FundingPurpose />} />
              <Route path="/apply/quick-money" element={<QuickMoney />} />
              <Route path="/apply/about-self" element={<AboutYourself />} />
-              <Route path="/apply/buisness-detail" element={<BuisnessDetail />} />
+              <Route path="/apply/business-detail" element={<BuisnessDetail />} />
               <Route path="/apply/signature" element={<Signature />} />
               <Route path="/apply/doc-upload" element={<DocumentUpload />} />
             <Route path="/apply/rejected" element={<ApplicationRejection />} />
+            <Route path="/apply/owner-info" element={<BuisnessOwner />} />
+              <Route path="/apply/business-name" element={<BuisnessName />} />
+              <Route path="/apply/pre-approved" element={<PreApproved />} />
             <Route path="/apply/thank-you" element={<ThankYou />} />
           </Routes>
         </div>
       </main>
 
-      {/* Footer stays full width */}
+  
       <Footer />
 
     </div>

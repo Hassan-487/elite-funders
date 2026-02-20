@@ -1,22 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Briefcase,
-  Send,
-  ClipboardList,
-  Building,
-  Megaphone,
-  Rocket,
-  CreditCard,
-  CarFront,
-  Expand,
-  Users,
-  CircleDollarSign,
-  MoreHorizontal,
-  ArrowLeft,
-  ArrowRight,
-  HandHelping,
-} from "lucide-react";
+import {Briefcase,Send,ClipboardList,Building,Megaphone,Rocket,CreditCard,  CarFront,  Expand,  
+  Users,  CircleDollarSign,  MoreHorizontal,  ArrowLeft,  ArrowRight,  HandHelping,} from "lucide-react";
 import { useFormStore } from "@/store"; 
 import ProgressBar from "@/components/ProgressBar";
 
@@ -45,26 +30,23 @@ export default function FundingPurpose() {
     { label: "Others (Specify)", icon: MoreHorizontal },
   ];
 
-  /* =====================
-      SAVE TO STORE
-  ===================== */
+ 
   useEffect(() => {
     setStepData("fundingPurpose", { purpose: selected });
   }, [selected, setStepData]);
 
-  /* =====================
-      DEBUG LOG
-  ===================== */
-  useEffect(() => {
-    console.log(
-      "ZUSTAND → fundingPurpose slice:",
-      fundingPurpose
-    );
-  }, [fundingPurpose]);
-
+   
+  // useEffect(() => {
+  //   console.log(
+  //     "ZUSTAND → fundingPurpose slice:",
+  //     fundingPurpose
+  //   );
+  // }, [fundingPurpose]);
+ 
+ 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-4 pb-32">
-      <ProgressBar currentStep={8} totalSteps={13} />
+      <ProgressBar currentStep={8} totalSteps={15} />
 
       {/* Card */}
       <div className="w-full max-w-3xl bg-white border border-gray-100 shadow-lg rounded-2xl p-6 sm:p-10">

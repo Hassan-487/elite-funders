@@ -26,23 +26,20 @@ export default function QuickMoney() {
     { label: "Unsure, just browsing rates", icon: Globe },
   ];
 
-  /* =====================
-      SAVE TO STORE
-  ===================== */
+  
   useEffect(() => {
     setStepData("QuickMoney", { speed: selected });
   }, [selected, setStepData]);
 
-  /* =====================
-      DEBUG LOG
-  ===================== */
-  useEffect(() => {
-    console.log("ZUSTAND → QuickMoney slice:", QuickMoney);
-  }, [QuickMoney]);
+  
+  // useEffect(() => {
+  //   console.log("ZUSTAND → QuickMoney slice:", QuickMoney);
+  // }, [QuickMoney]);
+
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-4 pb-32">
-    <ProgressBar currentStep={9} totalSteps={13} />
+    <ProgressBar currentStep={9} totalSteps={15} />
 
       {/* Card */}
       <div className="w-full max-w-3xl bg-white border border-gray-100 shadow-lg rounded-2xl p-6 sm:p-10">
@@ -93,7 +90,7 @@ export default function QuickMoney() {
           </button>
 
           <button
-            onClick={() => navigate("/apply/about-self")}
+            onClick={() => navigate("/apply/business-name")} 
             className="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition"
           >
             Next

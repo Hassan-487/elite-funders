@@ -9,7 +9,7 @@ export default function MonthlyRevenue() {
   
   const navigate = useNavigate();
  const [selected, setSelected] = useState(
-    monthlyRevenue?.range ?? "Less than $20,000"
+    monthlyRevenue?.monthlyrevenue ?? "Less than $20,000"
   );
   const options = [
     "Less than $20,000",
@@ -22,16 +22,16 @@ export default function MonthlyRevenue() {
 
   // Save to store
   useEffect(() => {
-    setStepData("monthlyRevenue", { range: selected });
+    setStepData("monthlyRevenue", { monthlyrevenue: selected });
   }, [selected, setStepData]);
-useEffect(() => {
-    console.log("ZUSTAND → monthlyRevenue slice:", monthlyRevenue);
-  }, [monthlyRevenue]);
+// useEffect(() => {
+//     console.log("ZUSTAND → monthlyRevenue slice:", monthlyRevenue);
+//   }, [monthlyRevenue]);
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-2 sm:px-4">
 
-     <ProgressBar currentStep={5} totalSteps={13} />
+     <ProgressBar currentStep={5} totalSteps={15} />
       {/* Card */}
       <div className="w-full max-w-2xl bg-white shadow-lg border border-gray-100 rounded-2xl p-6 sm:p-10">
 

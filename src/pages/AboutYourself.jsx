@@ -5,26 +5,26 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useFormStore } from "@/store"; 
 import ProgressBar from "@/components/ProgressBar";
+import { triggerCheckpoint } from "@/store/triggercheckpoints";
+
 
 export default function AboutYourself() {
   const navigate = useNavigate();
   const { aboutYourself, setStepData } = useFormStore();
-
+  const [consentChecked, setConsentChecked] = useState(false);
 
   const [form, setForm] = useState({
     firstName: aboutYourself?.firstName ?? "",
     lastName: aboutYourself?.lastName ?? "",
     email: aboutYourself?.email ?? "",
     phone: aboutYourself?.phone ?? "",
-    consent: aboutYourself?.consent ?? false,
   });
-
+ 
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
-    consent: "",
   });
 
   const nameRegex = /^[A-Za-z\s]*$/;
@@ -35,9 +35,9 @@ export default function AboutYourself() {
   }, [form, setStepData]);
 
 
-  useEffect(() => {
-    console.log("ZUSTAND → aboutYourself slice:", aboutYourself);
-  }, [aboutYourself]);
+  // useEffect(() => {
+  //   console.log("ZUSTAND → aboutYourself slice:", aboutYourself);
+  // }, [aboutYourself]);
 
  
 
@@ -67,43 +67,47 @@ export default function AboutYourself() {
     setForm((p) => ({ ...p, lastName: value }));
   };
 
-  /* ---------------- SUBMIT VALIDATION ---------------- */
+  
 
   const handleNext = () => {
-    const newErrors = {};
+  const newErrors = {};
 
-    if (!form.firstName)
-      newErrors.firstName = "First name is required";
-    else if (!nameRegex.test(form.firstName))
-      newErrors.firstName = "Only letters are allowed";
+  if (!form.firstName)
+    newErrors.firstName = "First name is required";
+  else if (!nameRegex.test(form.firstName))
+    newErrors.firstName = "Only letters are allowed";
 
-    if (!form.lastName)
-      newErrors.lastName = "Last name is required";
-    else if (!nameRegex.test(form.lastName))
-      newErrors.lastName = "Only letters are allowed";
+  if (!form.lastName)
+    newErrors.lastName = "Last name is required";
+  else if (!nameRegex.test(form.lastName))
+    newErrors.lastName = "Only letters are allowed";
 
-    if (!emailRegex.test(form.email))
-      newErrors.email = "Enter a valid email address";
+  if (!emailRegex.test(form.email))
+    newErrors.email = "Enter a valid email address";
 
-    if (!form.phone || form.phone.length < 10)
-      newErrors.phone = "Enter a valid phone number";
+  if (!form.phone || form.phone.length < 10)
+    newErrors.phone = "Enter a valid phone number";
 
-    if (!form.consent)
-      newErrors.consent = "Consent is required";
+  if (!consentChecked) {
+  newErrors.consent = "Consent is required";
+}
 
-    setErrors(newErrors);
+  setErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
-      navigate("/apply/buisness-detail");
-    }
-  };
+  if (Object.keys(newErrors).length === 0) {
+  
+    triggerCheckpoint("PAGE_11");
+    navigate("/apply/pre-approved");
+  }
+};
 
-  /* ---------------- UI ---------------- */
+
+
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-20 px-4 pb-32">
       
-      <ProgressBar currentStep={10} totalSteps={13} />
+      <ProgressBar currentStep={11} totalSteps={15} />
       <div className="w-full max-w-2xl bg-white border shadow-lg rounded-3xl p-6 sm:p-10">
         <h2 className="text-2xl font-bold text-center text-indigo-900 mb-8">
           Tell us about yourself
@@ -183,31 +187,27 @@ export default function AboutYourself() {
               </p>
             )}
             <div className="mt-2">
-              <PhoneInput
-                country="uk"
-                value={form.phone}
-                onChange={(phone) =>
-                  setForm((p) => ({ ...p, phone }))
-                }
-                inputClass="!w-full !border !rounded-lg !pl-14 !py-3 !text-sm"
-                containerClass="!w-full"
-              />
+             <PhoneInput
+              country="us"
+              value={form.phone}
+              onChange={(phone) =>
+  setForm((p) => ({ ...p, phone: `+${phone}` }))
+}
+              inputClass="!w-full !border !rounded-lg !pl-14 !py-3 !text-sm"
+            />
             </div>
           </div>
 
-          {/* Consent */}
           {errors.consent && (
             <p className="text-xs text-red-500">{errors.consent}</p>
           )}
           <label className="flex gap-3 text-xs text-gray-500">
-            <input
-              type="checkbox"
-              checked={form.consent}
-              onChange={(e) =>
-                setForm((p) => ({ ...p, consent: e.target.checked }))
-              }
-              className="accent-blue-600 mt-1"
-            />
+           <input
+  type="checkbox"
+  checked={consentChecked}
+  onChange={(e) => setConsentChecked(e.target.checked)}
+  className="accent-blue-600 mt-1"
+/>
             <span>
               I agree to receive text messages and accept the{" "}
               <span className="text-blue-600 underline">Terms of Service</span>{" "}
@@ -217,19 +217,18 @@ export default function AboutYourself() {
           </label>
         </div>
 
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 sm:justify-between mt-10">
+           <div className="flex flex-col sm:flex-row gap-4 sm:justify-between mt-10">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg"
+            className="flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-50 transition"
           >
             <ArrowLeft className="w-4 h-4" />
             Back
           </button>
 
           <button
-            onClick={handleNext}
-            className="flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700"
+             onClick={handleNext}
+            className="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition"
           >
             Next
             <ArrowRight className="w-4 h-4" />

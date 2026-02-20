@@ -59,16 +59,16 @@ export default function BusinessIndustry() {
   
      // DEBUG LOG
   
-  useEffect(() => {
-    console.log(
-      "ZUSTAND → businessIndustry slice:",
-      businessIndustry
-    );
-  }, [businessIndustry]);
+  // useEffect(() => {
+  //   console.log(
+  //     "ZUSTAND → businessIndustry slice:",
+  //     businessIndustry
+  //   );
+  // }, [businessIndustry]);
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-3 sm:px-4 pb-24 sm:pb-32">
-     <ProgressBar currentStep={7} totalSteps={13} />
+     <ProgressBar currentStep={7} totalSteps={15} />
 
       {/* Card */}
       <div className="w-full max-w-3xl bg-white shadow-lg border border-gray-100 rounded-2xl p-6 sm:p-10">

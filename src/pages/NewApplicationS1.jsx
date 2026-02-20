@@ -26,18 +26,18 @@ export default function NewApplicationStep1() {
     500000,
   ];
 
-  // Save to store whenever amount changes
+
   useEffect(() => {
     setStepData("newApplication", { amount });
   }, [amount, setStepData]);
-// 🔍 DEBUG: log when store updates
-useEffect(() => {
-  console.log("ZUSTAND → newApplication slice:", newApplication);
-}, [newApplication]);
+
+// useEffect(() => {
+//   console.log("ZUSTAND → newApplication slice:", newApplication);
+// }, [newApplication]);
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-2 sm:px-4">
-     <ProgressBar currentStep={1} totalSteps={13} />
+     <ProgressBar currentStep={1} totalSteps={15} />
 
       {/* Card */}
       <div className="w-full max-w-2xl bg-white shadow-lg border border-gray-100 rounded-2xl p-6 sm:p-10">

@@ -4,7 +4,8 @@ import { persist } from "zustand/middleware";
 export const useFormStore = create(
   persist(
     (set, get) => ({
-      NewApplication: {},
+      businessName: {},
+      newApplication: {},
       aboutYourself: {},
       businessDetails: {},
       businessIndustry: {},
@@ -16,6 +17,7 @@ export const useFormStore = create(
       documentUpload: {},
       startDate: {},
       signature: {},
+       businessOwner: {},
 
       /* =====================
           ACTIONS
@@ -32,6 +34,7 @@ export const useFormStore = create(
 
       clearAll: () =>
         set({
+          businessName: {},
             NewApplication: {},
           aboutYourself: {},
           businessDetails: {},
@@ -45,11 +48,13 @@ export const useFormStore = create(
           startDate: {},
           signature: {},
           QuickMoney: {},
+          businessOwner: {},
         }),
     }),
     {
       name: "elite-funder-application", // localStorage key
       partialize: (state) => ({
+        businessName: state.businessName,
         NewApplication: state.NewApplication,
         aboutYourself: state.aboutYourself,
         businessDetails: state.businessDetails,
@@ -60,6 +65,8 @@ export const useFormStore = create(
         personalCreditScore: state.personalCreditScore,
         startDate: state.startDate,
         signature: state.signature,
+        businessOwner: state.businessOwner,
+          QuickMoney: state.QuickMoney, 
         // ⚠️ bankAccount can be excluded later if sensitive
       }),
     }

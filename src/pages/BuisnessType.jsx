@@ -31,23 +31,19 @@ export default function BusinessTypeStep() {
     { label: "Other / Not Sure", icon: HelpCircle },
   ];
 
-  /* =====================
-      SAVE TO STORE
-  ===================== */
+
   useEffect(() => {
     setStepData("businessType", { type: selected });
   }, [selected, setStepData]);
 
-  /* =====================
-      DEBUG LOG
-  ===================== */
-  useEffect(() => {
-    console.log("ZUSTAND → businessType slice:", businessType);
-  }, [businessType]);
+  
+  // useEffect(() => {
+  //   console.log("ZUSTAND → businessType slice:", businessType);
+  // }, [businessType]);
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-2 sm:px-4">
-     <ProgressBar currentStep={2} totalSteps={13} />
+     <ProgressBar currentStep={2} totalSteps={15} />
 
       {/* Card */}
       <div className="w-full max-w-2xl bg-white shadow-lg border border-gray-100 rounded-2xl p-6 sm:p-10">

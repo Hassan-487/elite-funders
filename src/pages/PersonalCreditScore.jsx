@@ -17,7 +17,7 @@ export default function PersonalCreditScoreStep() {
   const {personalCreditScore, setStepData } = useFormStore();
   const navigate = useNavigate();
   const [selected, setSelected] = useState(
-    personalCreditScore?.range ?? "Excellent (720+)"
+    personalCreditScore?.creditscore ?? "Excellent (720+)"
   );
 
   const options = [
@@ -30,21 +30,21 @@ export default function PersonalCreditScoreStep() {
   ];
 
 useEffect(()=>{
-  setStepData("personalCreditScore", { range: selected });
+  setStepData("personalCreditScore", { creditscore: selected });
 
 },[selected, setStepData]);
 
- useEffect(() => {
-    console.log(
-      "ZUSTAND → personalCreditScore slice:",
-      personalCreditScore
-    );
-  }, [personalCreditScore]);
+//  useEffect(() => {
+//     console.log(
+//       "ZUSTAND → personalCreditScore slice:",
+//       personalCreditScore
+//     );
+//   }, [personalCreditScore]);
   
 
   return (
 <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-3 sm:px-4 pb-24 sm:pb-32">
-    <ProgressBar currentStep={6} totalSteps={13} />
+    <ProgressBar currentStep={6} totalSteps={15} />
 
       {/* Card */}
       <div className="w-full max-w-2xl bg-white shadow-lg border border-gray-100 rounded-2xl p-6 sm:p-10">
