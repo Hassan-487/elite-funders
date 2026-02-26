@@ -67,7 +67,7 @@ export const useFormStore = create(
         signature: state.signature,
         businessOwner: state.businessOwner,
           QuickMoney: state.QuickMoney, 
-        // ⚠️ bankAccount can be excluded later if sensitive
+        bankAccount: state.bankAccount,
       }),
     }
   )

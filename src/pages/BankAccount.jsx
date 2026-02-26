@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Landmark, Banknote } from "lucide-react";
 import { useFormStore } from "@/store"; // or ../store if no alias
 import ProgressBar from "@/components/ProgressBar";
-
+ 
 export default function BankAccountStep() {
   const navigate = useNavigate();
 

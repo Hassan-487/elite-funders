@@ -1,38 +1,48 @@
+
+
 import { Mail, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import {
+  CHECKPOINT_TO_ROUTE,
+  LS_PROGRESS_KEY,
+} from "@/utils/applicationResume";
 
 export default function ResumeApplication() {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [notFound, setNotFound] = useState(false);
+
+  const handleResume = () => {
+  
+    if (!email.trim()) {
+      setError("Please enter your email address.");
+      return;
+    }
+
+   
+    const saved = JSON.parse(
+      localStorage.getItem(LS_PROGRESS_KEY) || "null"
+    );
+
+    if (!saved?.lastCheckpoint) {
+      setNotFound(true);
+      return;
+    }
+
+  
+    const route =
+      CHECKPOINT_TO_ROUTE[saved.lastCheckpoint] || "/apply";
+
+    navigate(route);
+  };
+
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-24 px-4">
-
-      
-      {/* <div className="w-full max-w-3xl mb-10">
-        
-        <div className="flex justify-between text-sm mb-2">
-          <div className="text-gray-500">
-            Step <span className="text-blue-600">1</span> of 8
-          </div>
-          <div className="text-blue-600">13%</div>
-        </div>
-
-       
-        <div className="flex gap-2">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div
-              key={i}
-              className={`flex-1 h-2 rounded-full ${
-                i === 0 ? "bg-blue-600" : "bg-blue-100"
-              }`}
-            />
-          ))}
-        </div>
-      </div> */}
-
-      {/* Card */}
       <div className="w-full max-w-2xl bg-white shadow-lg border border-gray-100 rounded-3xl p-10">
-
-        {/* Icon */}
+        {/* Icon + Header */}
         <div className="flex flex-col items-center text-center mb-8">
           <div className="w-14 h-14 flex items-center justify-center bg-blue-50 rounded-lg mb-4">
             <Mail className="w-8 h-8 text-blue-600" />
@@ -44,7 +54,7 @@ export default function ResumeApplication() {
 
           <p className="text-gray-500 text-sm max-w-md">
             Enter the email address you used when starting your application.
-            We'll pick up right where you left off.
+            We’ll help you continue from where you left off.
           </p>
         </div>
 
@@ -58,37 +68,83 @@ export default function ResumeApplication() {
             <Mail className="w-5 h-5 text-gray-400 mr-2" />
             <input
               type="email"
-              placeholder="hammadramzan53@gmail.com"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setError("");
+                setNotFound(false);
+              }}
+              placeholder="johndoe@gmail.com"
               className="w-full outline-none text-sm"
             />
           </div>
 
-          <p className="text-xs text-gray-400 mt-2">
-            We'll search for your saved application using this email.
+          {/* Helper / Error Message */}
+          <p
+            className={`text-xs mt-2 ${
+              error ? "text-red-500" : "text-gray-400"
+            }`}
+          >
+            {error
+              ? error
+              : "We'll search for your saved application using this email."}
           </p>
         </div>
 
         {/* Buttons */}
+        {!notFound && (
         <div className="flex justify-between items-center border-t pt-6">
-
-          <button className="flex items-center gap-2 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition" onClick={() => navigate(-1)}>
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition"
+          >
             <ArrowLeft className="w-4 h-4" />
             Back
           </button>
 
-          <button className="bg-blue-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition">
+          <button
+            onClick={handleResume}
+            disabled={!email.trim()}
+            className={`px-8 py-3 rounded-lg shadow-md transition
+              ${
+                email.trim()
+                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              }
+            `}
+          >
             Find My Application
           </button>
         </div>
+        )}
+        {/* Application Not Found */}
+        {notFound && (
+          <div className="mt-6 p-5 border border-yellow-200 bg-yellow-50 rounded-xl text-sm">
+            <p className="mb-3 text-gray-800 font-medium">
+              We couldn’t find an application saved on this device.
+            </p>
 
-        {/* Bottom Text */}
-        <div className="text-center text-xs text-gray-500 mt-6">
-          Can't find your application?{" "}
-          <span className="text-blue-600 font-semibold underline cursor-pointer">
-            Start a new one
-          </span>
-        </div>
+            <p className="mb-4 text-gray-600">
+              You can start a new application or cancel and try another email.
+            </p>
 
+            <div className="flex gap-3">
+              <button
+                onClick={() => navigate("/apply")}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700"
+              >
+                Start New Application
+              </button>
+
+              <button
+                onClick={() => setNotFound(false)}
+                className="border border-gray-300 px-4 py-2 rounded-lg text-sm hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

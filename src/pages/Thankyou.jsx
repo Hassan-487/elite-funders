@@ -1,6 +1,10 @@
 import { CheckCircle, Phone, Mail, ShieldCheck } from "lucide-react";
-
+import { LS_PROGRESS_KEY } from "@/utils/applicationResume";
+import { useEffect } from "react";
 export default function ThankYou() {
+  useEffect(() => {
+  localStorage.removeItem(LS_PROGRESS_KEY);
+}, []);
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-2xl bg-white border border-blue-500 shadow-xl rounded-lg p-6 sm:p-10">

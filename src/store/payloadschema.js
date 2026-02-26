@@ -6,6 +6,14 @@ export const PAYLOAD_SCHEMA = {
   businessType: {
     type: { key: "Type of Business" },
   },
+  
+  bankAccount: {
+  hasAccount: {
+    key: "Do you have a business bank account?",
+    transform: (v) => (v === "yes" ? "Yes" : "No"),
+  },
+},
+
 
   startDate: {
     startMonth: { key: "Month" },

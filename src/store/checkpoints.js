@@ -2,6 +2,7 @@ export const CHECKPOINTS = {
   PAGE_11: [
     "newApplication",
     "businessType",
+    "bankAccount",
     "startDate",
     "monthlyRevenue",
     "personalCreditScore",
@@ -10,6 +11,7 @@ export const CHECKPOINTS = {
     "QuickMoney",
     "businessName",
     "aboutYourself",
+
   ],
 
   PAGE_13: [
