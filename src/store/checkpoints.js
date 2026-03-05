@@ -18,11 +18,13 @@ export const CHECKPOINTS = {
     
     "businessDetails",
     "businessOwner",
+    "secondBusinessOwner",
+ 
    
   ],
 
   PAGE_15: [
-    "signature",
+       "signature",
     "documentUpload",
   ],
 };

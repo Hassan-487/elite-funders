@@ -31,10 +31,6 @@ export default function QuickMoney() {
     setStepData("QuickMoney", { speed: selected });
   }, [selected, setStepData]);
 
-  
-  // useEffect(() => {
-  //   console.log("ZUSTAND → QuickMoney slice:", QuickMoney);
-  // }, [QuickMoney]);
 
 
   return (

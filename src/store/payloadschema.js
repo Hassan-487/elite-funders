@@ -1,3 +1,4 @@
+
 export const PAYLOAD_SCHEMA = {
   newApplication: {
     amount: { key: "How Much Do You Need?" },
@@ -6,14 +7,13 @@ export const PAYLOAD_SCHEMA = {
   businessType: {
     type: { key: "Type of Business" },
   },
-  
-  bankAccount: {
-  hasAccount: {
-    key: "Do you have a business bank account?",
-    transform: (v) => (v === "yes" ? "Yes" : "No"),
-  },
-},
 
+  bankAccount: {
+    hasAccount: {
+      key: "Do you have a business bank account?",
+      transform: (v) => (v === "yes" ? "Yes" : "No"),
+    },
+  },
 
   startDate: {
     startMonth: { key: "Month" },
@@ -39,13 +39,11 @@ export const PAYLOAD_SCHEMA = {
   QuickMoney: {
     speed: { key: "How quickly do you need the money?" },
   },
-  
-  
-   businessName: {
+
+  businessName: {
     name: { key: "Business Name" },
   },
 
-  
   aboutYourself: {
     firstName: { key: "Business Owner First Name" },
     lastName: { key: "Business Owner Last Name" },
@@ -53,7 +51,8 @@ export const PAYLOAD_SCHEMA = {
     email: { key: "Business Owner Email Address" },
   },
 
-   businessDetails: {
+
+  businessDetails: {
     businessName: { key: "Business Name" },
     email: { key: "Email Address" },
     phone: { key: "Phone Number" },
@@ -65,35 +64,16 @@ export const PAYLOAD_SCHEMA = {
     incorporationState: { key: "State of incorporation" },
   },
 
- businessOwner: {
-    "Business Owner First Name": { key: "Business Owner First Name" },
-    "Business Owner Last Name": { key: "Business Owner Last Name" },
-    "Business Owner Street Address": { key: "Business Owner Street Address" },
-    "Business Owner City": { key: "Business Owner City" },
-    "Business Owner State": { key: "Business Owner State" },
-    "Business Owner Zip": { key: "Business Owner Zip" },
-    "Ownership %": { key: "Ownership %" },
-    "Business Owner Date of Birth": { key: "Business Owner Date of Birth" },
-    "Business Owner Social Security No": { key: "Business Owner Social Security No" },
-    "Business Owner Phone Number": { key: "Business Owner Phone Number" },
-    "Business Owner Email Address": { key: "Business Owner Email Address" },
+  signature: {
+    finalSignature: { key: "Signature URL" },
+    mode: { key: "Signature Mode" },
+    Image_ID: { key: "Image_ID" },
   },
 
-signature: {
-  finalSignature: { key: "Signature URL" },
-  mode: { key: "Signature Mode" },
-},
-
-documentUpload: {
-  one: {
-    key: "Bank Statement #1 URL",
+  documentUpload: {
+    one: { key: "Bank Statement #1 URL" },
+    two: { key: "Bank Statement #2 URL" },
+    three: { key: "Bank Statement #3 URL" },
+    four: { key: "Bank Statement #4 URL" },
   },
-  two: {
-    key: "Bank Statement #2 URL",
-  },
-  three: {
-    key: "Bank Statement #3 URL",
-  },
-},
-
 };

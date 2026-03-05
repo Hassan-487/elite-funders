@@ -6,7 +6,7 @@ import ProgressBar from "@/components/ProgressBar";
 
 export default function MonthlyRevenue() {
   const { monthlyRevenue, setStepData } = useFormStore();
-  
+
   const navigate = useNavigate();
  const [selected, setSelected] = useState(
     monthlyRevenue?.monthlyrevenue ?? "Less than $20,000"
@@ -17,7 +17,7 @@ export default function MonthlyRevenue() {
     "$50,000 - $100,000",
     "$100,000 - $250,000",
     "$250,000 - $500,000",
-    "$500,000 +",
+    "$500,000+",
   ];
 
   // Save to store

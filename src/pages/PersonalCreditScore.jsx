@@ -22,10 +22,10 @@ export default function PersonalCreditScoreStep() {
 
   const options = [
     { label: "Excellent (720+)", icon: BadgeCheck },
-    { label: "Great (680–719)", icon: Star },
-    { label: "Good (640–679)", icon: ThumbsUp },
-    { label: "Fair (600–639)", icon: Minus },
-    { label: "Low (550–599)", icon: AlertTriangle },
+    { label: "Great (680-719)", icon: Star },
+    { label: "Good (640-679)", icon: ThumbsUp },
+    { label: "Fair (600-639)", icon: Minus },
+    { label: "Low (550-599)", icon: AlertTriangle },
     { label: "Poor (Below 550)", icon: AlertCircle },
   ];
 
@@ -34,13 +34,6 @@ useEffect(()=>{
 
 },[selected, setStepData]);
 
-//  useEffect(() => {
-//     console.log(
-//       "ZUSTAND → personalCreditScore slice:",
-//       personalCreditScore
-//     );
-//   }, [personalCreditScore]);
-  
 
   return (
 <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-3 sm:px-4 pb-24 sm:pb-32">

@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { useEffect } from "react";
-import { initGoogleAuth } from "@/utils/googleAuth";
+//import { useEffect } from "react";
+//import { initGoogleAuth } from "@/utils/googleAuth";
 
 import Home from "./pages/Home";
 import ResumeApplication from "./pages/ResumeApplication";
@@ -24,17 +24,20 @@ import ThankYou from "./pages/Thankyou";
 import BuisnessOwner from "./pages/BuisnessOwnerInformation";
 import PreApproved from "./pages/Preapproved";
 import BuisnessName from "./pages/BuisnessName";
+import ScrollToTop from "./components/ScrollToTop";
+import SecondBusinessOwnerInformation from "./pages/SecondBusinessOwnerInformation";
 
 function App() {
-  useEffect(() => {
-    initGoogleAuth()
-      .then(() => console.log("✅ Google Auth initialized"))
-      .catch((err) => console.error("❌ Google Auth failed", err));
-  }, []);
+  // useEffect(() => {
+  //   initGoogleAuth()
+  //     .then(() => console.log("✅ Google Auth initialized"))
+  //     .catch((err) => console.error("❌ Google Auth failed", err));
+  // }, []);
   
   return (
-    <div className="min-h-screen flex flex-col bg-white">
 
+    <div className="min-h-screen flex flex-col bg-white">
+       <ScrollToTop />
       
       <Header />
 
@@ -58,6 +61,7 @@ function App() {
               <Route path="/apply/doc-upload" element={<DocumentUpload />} />
             <Route path="/apply/rejected" element={<ApplicationRejection />} />
             <Route path="/apply/owner-info" element={<BuisnessOwner />} />
+              <Route path="/apply/second-owner-info" element={<SecondBusinessOwnerInformation />} />
               <Route path="/apply/business-name" element={<BuisnessName />} />
               <Route path="/apply/pre-approved" element={<PreApproved />} />
             <Route path="/apply/thank-you" element={<ThankYou />} />

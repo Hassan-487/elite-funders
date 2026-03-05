@@ -22,7 +22,7 @@ const US_STATES = [
 
 export default function BusinessOwnerInformation() {
   const navigate = useNavigate();
-  const { businessOwner, aboutYourself,setStepData } = useFormStore();
+  const { secondBusinessOwner, setStepData } = useFormStore();
 const [isVerifying, setIsVerifying] = useState(false);
   const [popup, setPopup] = useState({
   show: false,
@@ -39,65 +39,59 @@ const showPopup = (message) => {
   }, 6000);
 };
 const fieldRefs = {
-  "Business Owner First Name": useRef(null),
-  "Business Owner Last Name": useRef(null),
-  "Business Owner Street Address": useRef(null),
-  "Business Owner City": useRef(null),
-  "Business Owner State": useRef(null),
-  "Business Owner Zip": useRef(null),
-  "Ownership %": useRef(null),
-  "Business Owner Date of Birth": useRef(null),
-  "Business Owner Social Security No": useRef(null),
-  "Business Owner Phone Number": useRef(null),
-  "Business Owner Email Address": useRef(null),
+  "Second Business Owner First Name": useRef(null),
+  "Second Business Owner Last Name": useRef(null),
+  "Second Business Owner Street Address": useRef(null),
+  "Second Business Owner City": useRef(null),
+  "Second Business Owner State": useRef(null),
+  "Second Business Owner Zip": useRef(null),
+  "Second Business Owner Ownership %": useRef(null),
+  "Second Business Owner Date of Birth": useRef(null),
+  "Second Business Owner Social Security No": useRef(null),
+  "Second Business Owner Phone Number": useRef(null),
+  "Second Business Owner Email Address": useRef(null),
 };
 
 const [form, setForm] = useState({
-  "Business Owner First Name":
-    businessOwner?.["Business Owner First Name"] ?? aboutYourself?.firstName ?? "",
+  "Second Business Owner First Name":
+    secondBusinessOwner?.["Second Business Owner First Name"] ?? "",
 
-  "Business Owner Last Name":
-    businessOwner?.["Business Owner Last Name"] ?? aboutYourself?.lastName ?? "",
+  "Second Business Owner Last Name":
+    secondBusinessOwner?.["Second Business Owner Last Name"] ?? "",
 
-  "Business Owner Street Address":
-    businessOwner?.["Business Owner Street Address"] ?? "",
+  "Second Business Owner Street Address":
+    secondBusinessOwner?.["Second Business Owner Street Address"] ?? "",
 
-  "Business Owner City":
-    businessOwner?.["Business Owner City"] ?? "",
+  "Second Business Owner City":
+    secondBusinessOwner?.["Second Business Owner City"] ?? "",
 
-  "Business Owner State":
-    businessOwner?.["Business Owner State"] ?? "",
+  "Second Business Owner State":
+    secondBusinessOwner?.["Second Business Owner State"] ?? "",
 
-  "Business Owner Zip":
-    businessOwner?.["Business Owner Zip"] ?? "",
+  "Second Business Owner Zip":
+    secondBusinessOwner?.["Second Business Owner Zip"] ?? "",
 
-  "Ownership %":
-    businessOwner?.["Ownership %"] ?? "",
+  "Second Business Owner Ownership %":
+    secondBusinessOwner?.["Second Business Owner Ownership %"] ?? "",
 
-  "Business Owner Date of Birth":
-    businessOwner?.["Business Owner Date of Birth"] ?? "",
+  "Second Business Owner Date of Birth":
+    secondBusinessOwner?.["Second Business Owner Date of Birth"] ?? "",
 
-  "Business Owner Social Security No":
-    businessOwner?.["Business Owner Social Security No"] ?? "",
+  "Second Business Owner Social Security No":
+    secondBusinessOwner?.["Second Business Owner Social Security No"] ?? "",
 
-  "Business Owner Phone Number":
-    businessOwner?.["Business Owner Phone Number"] ?? aboutYourself?.phone ?? "",
+  "Second Business Owner Phone Number":
+    secondBusinessOwner?.["Second Business Owner Phone Number"] ?? "",
 
-  "Business Owner Email Address":
-    businessOwner?.["Business Owner Email Address"] ?? aboutYourself?.email ?? "",
+  "Second Business Owner Email Address":
+    secondBusinessOwner?.["Second Business Owner Email Address"] ?? "",
 });
-
-
 
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    setStepData("businessOwner", form);
+    setStepData("secondBusinessOwner", form);
   }, [form, setStepData]);
-
-//  useEffect(() => {
-//     console.log("ZUSTAND → businessOwner slice:", businessOwner);
-//    }, [businessOwner]);
 
 
 const scrollToError = (errors) => {
@@ -136,50 +130,50 @@ const validatePhoneFE = async (phone) => {
 
 const validateField = (field, value, form) => {
   switch (field) {
-    case "Business Owner First Name":
+    case "Second Business Owner First Name":
       if (!value) return "Required";
       return "";
 
-    case "Business Owner Last Name":
+    case "Second Business Owner Last Name":
       if (!value) return "Required";
       return "";
 
-    case "Business Owner Street Address":
+    case "Second Business Owner Street Address":
       if (!value) return "Required";
       return "";
 
-    case "Business Owner City":
+    case "Second Business Owner City":
       if (!value) return "Required";
       return "";
 
-    case "Business Owner State":
+    case "Second Business Owner State":
       if (!value) return "Required";
       return "";
 
-    case "Business Owner Zip":
+    case "Second Business Owner Zip":
       if (value && !zipRegex.test(value)) return "ZIP must be 5 digits";
       return "";
 
-    case "Ownership %":
+    case "Second Business Owner Ownership %":
       const ownership = Number(value);
       if (value && (isNaN(ownership) || ownership < 0 || ownership > 100))
         return "Ownership must be between 0 and 100";
       return "";
 
-    case "Business Owner Date of Birth":
+    case "Second Business Owner Date of Birth":
       if (value && !isAdult(value)) return "Must be at least 18";
       return "";
 
-    case "Business Owner Social Security No":
+    case "Second Business Owner Social Security No":
       if (value && !ssnRegex.test(value)) return "Invalid SSN";
       return "";
 
-    case "Business Owner Phone Number":
+    case "Second Business Owner Phone Number":
       const digits = value.replace(/\D/g, "");
       if (digits && digits.length < 10) return "Invalid phone number";
       return "";
 
-    case "Business Owner Email Address":
+    case "Second Business Owner Email Address":
       if (value && !emailRegex.test(value)) return "Invalid email address";
       return "";
 
@@ -237,32 +231,32 @@ const setField = (field, value) => {
   const handleNext = async () => {
   const e = {};
 
-  if (!form["Business Owner First Name"]) e["Business Owner First Name"] = "Required";
-  if (!form["Business Owner Last Name"]) e["Business Owner Last Name"] = "Required";
-  if (!form["Business Owner Street Address"]) e["Business Owner Street Address"] = "Required";
-  if (!form["Business Owner City"]) e["Business Owner City"] = "Required";
-  if (!form["Business Owner State"]) e["Business Owner State"] = "Required";
+  if (!form["Second Business Owner First Name"]) e["Second Business Owner First Name"] = "Required";
+  if (!form["Second Business Owner Last Name"]) e["Second Business Owner Last Name"] = "Required";
+  if (!form["Second Business Owner Street Address"]) e["Second Business Owner Street Address"] = "Required";
+  if (!form["Second Business Owner City"]) e["Second Business Owner City"] = "Required";
+  if (!form["Second Business Owner State"]) e["Second Business Owner State"] = "Required";
 
-  if (!zipRegex.test(form["Business Owner Zip"]))
-    e["Business Owner Zip"] = "ZIP must be 5 digits";
+  if (!zipRegex.test(form["Second Business Owner Zip"]))
+    e["Second Business Owner Zip"] = "ZIP must be 5 digits";
 
-  const ownership = Number(form["Ownership %"]);
+  const ownership = Number(form["Second Business Owner Ownership %"]);
   if (isNaN(ownership) || ownership < 0 || ownership > 100)
-    e["Ownership %"] = "Ownership must be between 0 and 100";
+    e["Second Business Owner Ownership %"] = "Ownership must be between 0 and 100";
 
-  if (!dobRegex.test(form["Business Owner Date of Birth"]))
-    e["Business Owner Date of Birth"] = "Use MM/DD/YYYY";
-  else if (!isAdult(form["Business Owner Date of Birth"]))
-    e["Business Owner Date of Birth"] = "Must be at least 18";
+  if (!dobRegex.test(form["Second Business Owner Date of Birth"]))
+    e["Second Business Owner Date of Birth"] = "Use MM/DD/YYYY";
+  else if (!isAdult(form["Second Business Owner Date of Birth"]))
+    e["Second Business Owner Date of Birth"] = "Must be at least 18";
 
-  if (!ssnRegex.test(form["Business Owner Social Security No"]))
-    e["Business Owner Social Security No"] = "Invalid SSN";
+  if (!ssnRegex.test(form["Second Business Owner Social Security No"]))
+    e["Second Business Owner Social Security No"] = "Invalid SSN";
 
-  if (!form["Business Owner Phone Number"] || form["Business Owner Phone Number"].length < 10)
-    e["Business Owner Phone Number"] = "Invalid phone number";
+  if (!form["Second Business Owner Phone Number"] || form["Second Business Owner Phone Number"].length < 10)
+    e["Second Business Owner Phone Number"] = "Invalid phone number";
 
-  if (!emailRegex.test(form["Business Owner Email Address"]))
-    e["Business Owner Email Address"] = "Invalid email address";
+  if (!emailRegex.test(form["Second Business Owner Email Address"]))
+    e["Second Business Owner Email Address"] = "Invalid email address";
 
  setErrors(e);
 if (Object.keys(e).length !== 0) {
@@ -275,15 +269,15 @@ setIsVerifying(true);
 try {
   // 🔥 FE VALIDATION CALLS
   const [emailRes, phoneRes] = await Promise.all([
-    validateEmailFE(form["Business Owner Email Address"]),
-    validatePhoneFE(form["Business Owner Phone Number"]),
+    validateEmailFE(form["Second Business Owner Email Address"]),
+    validatePhoneFE(form["Second Business Owner Phone Number"]),
   ]);
 
   // Email decision
   if (emailRes.status !== "valid") {
     setErrors((p) => ({
       ...p,
-      "Business Owner Email Address": "Email is not deliverable",
+      "Second Business Owner Email Address": "Email is not deliverable",
     }));
     showPopup("Please enter a valid, deliverable email address.");
     return;
@@ -293,24 +287,15 @@ try {
   if (!phoneRes.phone_valid) {
     setErrors((p) => ({
       ...p,
-      "Business Owner Phone Number": "Invalid phone number",
+      "Second Business Owner Phone Number": "Invalid phone number",
     }));
     showPopup("Please enter a valid mobile phone number.");
     return;
   }
 
   // ✅ All validations passed
-  //triggerCheckpoint("PAGE_13");
-  //navigate("/apply/signature");
-
-const ownership = Number(form["Ownership %"]);
-
-if (ownership <= 50) {
-  navigate("/apply/second-owner-info");
-} else {
-   triggerCheckpoint("PAGE_13");
+  triggerCheckpoint("PAGE_13");
   navigate("/apply/signature");
-}
 
 } catch (err) {
   showPopup("Validation service failed. Please try again.");
@@ -325,95 +310,90 @@ if (ownership <= 50) {
 
       <div className="w-full max-w-3xl bg-white border shadow-lg rounded-3xl p-6 sm:p-10">
         <h2 className="text-2xl font-bold text-center text-indigo-900">
-          Business Owner Information
+          Second Business Owner Information
         </h2>
 
         <div className="space-y-6 mt-8">
           <TwoCol>
-            <Input label="First Name" value={form["Business Owner First Name"]}
-              onChange={(v) => setField("Business Owner First Name", v)} 
+            <Input label="First Name" value={form["Second Business Owner First Name"]}
+              onChange={(v) => setField("Second Business Owner First Name", v)} 
 
-              error={errors["Business Owner First Name"]} inputRef={fieldRefs["Business Owner First Name"]}
+              error={errors["Second Business Owner First Name"]} inputRef={fieldRefs["Second Business Owner First Name"]}
             />
-            <Input label="Last Name" value={form["Business Owner Last Name"]}
-              onChange={(v) => setField("Business Owner Last Name", v)}
-              error={errors["Business Owner Last Name"]} inputRef={fieldRefs["Business Owner Last Name"]}
+            <Input label="Last Name" value={form["Second Business Owner Last Name"]}
+              onChange={(v) => setField("Second Business Owner Last Name", v)}
+              error={errors["Second Business Owner Last Name"]} inputRef={fieldRefs["Second Business Owner Last Name"]}
             />
           </TwoCol>
 
           <Input label="Street Address"
-            value={form["Business Owner Street Address"]}
-            onChange={(v) => setField("Business Owner Street Address", v)}
-            error={errors["Business Owner Street Address"]} inputRef={fieldRefs["Business Owner Street Address"]}
+            value={form["Second Business Owner Street Address"]}
+            onChange={(v) => setField("Second Business Owner Street Address", v)}
+            error={errors["Second Business Owner Street Address"]} inputRef={fieldRefs["Second Business Owner Street Address"]}
           />
 
           <ThreeCol>
-            <Input label="City" value={form["Business Owner City"]}
-              onChange={(v) => setField("Business Owner City", v)}
-              error={errors["Business Owner City"]} inputRef={fieldRefs["Business Owner City"]}
+            <Input label="City" value={form["Second Business Owner City"]}
+              onChange={(v) => setField("Second Business Owner City", v)}
+              error={errors["Second Business Owner City"]} inputRef={fieldRefs["Second Business Owner City"]}
             />
             <Select label="State" options={US_STATES}
-              value={form["Business Owner State"]}
-              onChange={(v) => setField("Business Owner State", v)}
-              error={errors["Business Owner State"]} inputRef={fieldRefs["Business Owner State"]}
+              value={form["Second Business Owner State"]}
+              onChange={(v) => setField("Second Business Owner State", v)}
+              error={errors["Second Business Owner State"]} inputRef={fieldRefs["Second Business Owner State"]}
             />
             <Input label="Zip" inputMode="numeric"
-              value={form["Business Owner Zip"]}
-              onChange={(v) => setField("Business Owner Zip", v)}
-              error={errors["Business Owner Zip"]} inputRef={fieldRefs["Business Owner Zip"]}
+              value={form["Second Business Owner Zip"]}
+              onChange={(v) => setField("Second Business Owner Zip", v)}
+              error={errors["Second Business Owner Zip"]} inputRef={fieldRefs["Second Business Owner Zip"]}
             />
           </ThreeCol>
 
-          <Input label="Ownership %" inputMode="numeric"
-            value={form["Ownership %"]}
-            onChange={(v) => setField("Ownership %", v)}
-            error={errors["Ownership %"]} inputRef={fieldRefs["Ownership %"]}
+          <Input label="Second Business Owner Ownership %" inputMode="numeric"
+            value={form["Second Business Owner Ownership %"]}
+            onChange={(v) => setField("Second Business Owner Ownership %", v)}
+            error={errors["Second Business Owner Ownership %"]} inputRef={fieldRefs["Second Business Owner Ownership %"]}
           />
 
-          {/* <Input label="Date of Birth (MM/DD/YYYY)" inputMode="numeric"
-            value={form["Business Owner Date of Birth"]}
-            onChange={(v) => setField("Business Owner Date of Birth", formatDOB(v))}
-            error={errors["Business Owner Date of Birth"]}
-          /> */}
           <Input 
   label="Date of Birth"
   inputMode="none"
-  value={form["Business Owner Date of Birth"]}
-  onChange={(v) => setField("Business Owner Date of Birth", v)}
-  error={errors["Business Owner Date of Birth"]}  inputRef={fieldRefs["Business Owner Date of Birth"]}
+  value={form["Second Business Owner Date of Birth"]}
+  onChange={(v) => setField("Second Business Owner Date of Birth", v)}
+  error={errors["Second Business Owner Date of Birth"]}  inputRef={fieldRefs["Second Business Owner Date of Birth"]}
   type="date"
   max={new Date().toISOString().split("T")[0]}
 />
 
-          <Input label="Social Security Number" inputMode="numeric"
-            value={form["Business Owner Social Security No"]}
-            onChange={(v) => setField("Business Owner Social Security No", formatSSN(v))}
-            error={errors["Business Owner Social Security No"]} inputRef={fieldRefs["Business Owner Social Security No"]} 
+          <Input label="Second Business Owner Social Security Number" inputMode="numeric"
+            value={form["Second Business Owner Social Security No"]}
+            onChange={(v) => setField("Second Business Owner Social Security No", formatSSN(v))}
+            error={errors["Second Business Owner Social Security No"]} inputRef={fieldRefs["Second Business Owner Social Security No"]} 
           />
 
           <div>
-            <div ref={fieldRefs["Business Owner Phone Number"]}>
-            <label className="text-sm text-indigo-900">Business Owner Phone Number</label>
-            {errors["Business Owner Phone Number"] && (
+            <div ref={fieldRefs["Second Business Owner Phone Number"]}>
+            <label className="text-sm text-indigo-900">Second Business Owner Phone Number</label>
+            {errors["Second Business Owner Phone Number"] && (
               <p className="text-xs text-red-500">
-                {errors["Business Owner Phone Number"]}
+                {errors["Second Business Owner Phone Number"]}
               </p>
             )}
            <PhoneInput
   country="us"
-  value={form["Business Owner Phone Number"]}
+  value={form["Second Business Owner Phone Number"]}
   onChange={(value) =>
-    setField("Business Owner Phone Number", `+${value}`)
+    setField("Second Business Owner Phone Number", `+${value}`)
   }
   inputClass="!w-full !h-[48px] !border !rounded-lg !pl-14 !text-sm"
 />
 </div>
           </div>
 
-          <Input label="Business Owner Email Address" inputMode="email"
-            value={form["Business Owner Email Address"]}
-            onChange={(v) => setField("Business Owner Email Address", v)}
-            error={errors["Business Owner Email Address"]} inputRef={fieldRefs["Business Owner Email Address"]}
+          <Input label="Second Business Owner Email Address" inputMode="email"
+            value={form["Second Business Owner Email Address"]}
+            onChange={(v) => setField("Second Business Owner Email Address", v)}
+            error={errors["Second Business Owner Email Address"]} inputRef={fieldRefs["Second Business Owner Email Address"]}
           />
         </div>
 
@@ -496,55 +476,6 @@ if (ownership <= 50) {
   );
 }
 
-/* =====================
-    UI HELPERS
-===================== */
-
-// function Input({
-//   label,
-//   value,
-//   onChange,
-//   placeholder,
-//   error,
-//   inputMode = "text",
-//   type = "text",
-//   max,
-// }) {
-//   return (
-//     <div>
-//       <label className="text-sm text-indigo-900">{label}</label>
-//       {error && <p className="text-xs text-red-500">{error}</p>}
-//       <input
-//         type={type}
-//         value={value}
-//         onChange={(e) => onChange(e.target.value)}
-//         placeholder={placeholder}
-//         inputMode={inputMode}
-//         max={max}
-//         className="mt-2 w-full border rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500"
-//       />
-//     </div>
-//   );
-// }
-
-// function Select({ label, options, value, onChange, error }) {
-//   return (
-//     <div>
-//       <label className="text-sm text-indigo-900">{label}</label>
-//       {error && <p className="text-xs text-red-500">{error}</p>}
-//       <select
-//         value={value}
-//         onChange={(e) => onChange(e.target.value)}
-//         className="mt-2 w-full border rounded-lg px-3 py-3 text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
-//       >
-//         <option value="">Select</option>
-//         {options.map((o) => (
-//           <option key={o} value={o}>{o}</option>
-//         ))}
-//       </select>
-//     </div>
-//   );
-// }
 
 function Input({
   label,

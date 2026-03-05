@@ -44,27 +44,19 @@ export default function BusinessIndustry() {
     { label: "Healthcare & Medical", icon: BriefcaseMedical },
     { label: "Technology & IT Services", icon: Cpu },
     { label: "Real Estate", icon: Building2 },
-    { label: "Professional Services (Legal, Accounting)", icon: Gavel },
+    { label: "Professional Services (Legal, Accounting, Consulting)", icon: Gavel },
     { label: "Transportation & Logistics", icon: Truck },
-    { label: "Restaurants & Food Services", icon: UtensilsCrossed },
+    { label: "Restaurants & Food Service", icon: UtensilsCrossed },
     { label: "Hospitality & Tourism", icon: Hotel },
-    { label: "Others", icon: MoreHorizontal },
+    { label: "Other (Specify)", icon: MoreHorizontal },
   ];
 
-  
+
   useEffect(() => {
     setStepData("businessIndustry", { industry: selected });
   }, [selected, setStepData]);
 
   
-     // DEBUG LOG
-  
-  // useEffect(() => {
-  //   console.log(
-  //     "ZUSTAND → businessIndustry slice:",
-  //     businessIndustry
-  //   );
-  // }, [businessIndustry]);
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-12 sm:pt-20 px-3 sm:px-4 pb-24 sm:pb-32">

@@ -28,7 +28,7 @@ export default function BusinessTypeStep() {
     { label: "LLC", icon: FileText },
     { label: "S-Corp", icon: Landmark },
     { label: "C-Corp", icon: Landmark },
-    { label: "Other / Not Sure", icon: HelpCircle },
+    { label: "Other/Not Sure", icon: HelpCircle },
   ];
 
 

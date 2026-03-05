@@ -11,12 +11,13 @@ export default function FundingPurpose() {
 
   
   const [selected, setSelected] = useState(
-    fundingPurpose?.purpose ?? "Buy a business / franchise"
+    fundingPurpose?.purpose ?? "Buy a business/franchise"
   );
 
   const options = [
-    { label: "Buy a business / franchise", icon: Briefcase },
+    { label: "Buy a business/franchise", icon: Briefcase },
     { label: "Remodel my location", icon: Send },
+    { label: "Payroll", icon: Briefcase },
     { label: "Inventory", icon: ClipboardList },
     { label: "Commercial real estate", icon: Building },
     { label: "Marketing", icon: Megaphone },
@@ -27,7 +28,7 @@ export default function FundingPurpose() {
     { label: "Expansion", icon: Expand },
     { label: "Finance accounts receivable", icon: Users },
     { label: "Refinance debt", icon: CircleDollarSign },
-    { label: "Others (Specify)", icon: MoreHorizontal },
+    { label: "Other (Specify)", icon: MoreHorizontal },
   ];
 
  

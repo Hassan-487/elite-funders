@@ -1,0 +1,35 @@
+export const STEP_ORDER = [
+    "newApplication",
+    "businessType",
+    "bankAccount",
+    "startDate",
+ "monthlyRevenue",
+"personalCreditScore",
+ "businessIndustry",
+"fundingPurpose",
+"QuickMoney",
+ "businessName",
+  "aboutYourself",
+  "businessDetails",
+  "businessOwner",
+  "signature",
+  // "documentUpload",
+];
+
+export const STEP_REQUIRED_FIELDS = {
+    newApplication: ["amount"],
+  businessType: ["type"],
+    bankAccount: ["hasAccount"],
+    startDate: ["startMonth", "startYear"],
+    monthlyRevenue: ["monthlyrevenue"],
+    personalCreditScore: ["creditscore"],
+    businessIndustry: ["industry"],
+    fundingPurpose: ["purpose"],
+    QuickMoney: ["speed"],
+  businessName: ["name"],
+  aboutYourself: ["firstName", "lastName", "email", "phone"],
+  businessDetails: ["address", "city", "state", "zip"],
+  businessOwner: ["name", "ownershipPercentage", "dob", "ssnLast4"],
+  signature: ["finalSignature"],
+};
+

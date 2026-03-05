@@ -1,14 +1,10 @@
 
-
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Upload } from "lucide-react";
 import { useEffect,useState } from "react";
 import { useFormStore } from "@/store";
 import ProgressBar from "@/components/ProgressBar";
 import { triggerCheckpoint } from "@/store/triggercheckpoints";
-import { signInWithGoogle } from "@/utils/googleAuth";
-
-import { uploadToDrive } from "@/utils/googleDriveUpload";
 
 
 export default function UploadBankStatements() {
@@ -22,9 +18,11 @@ const [isUploading, setIsUploading] = useState(false);
     clearAll,
   } = useFormStore();
 
-  /* =====================
-      FILE HANDLER
-  ===================== */
+const store = useFormStore();
+const businessState = store.businessDetails?.state;
+const isCalifornia = businessState === "California";
+  
+
   const handleFileChange = (key, file) => {
     if (!file) return;
 
@@ -39,69 +37,133 @@ const [isUploading, setIsUploading] = useState(false);
     });
   };
 
- 
-  // useEffect(() => {
-  //   console.log("ZUSTAND → documentUpload (FILES):", documentUpload);
-  // }, [documentUpload]);
+ const getPreviousMonths = (count) => {
+  const months = [];
+  const now = new Date();
 
-  
+  for (let i = 1; i <= count; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const monthName = d.toLocaleString("default", { month: "long" });
+    months.push(monthName);
+  }
+
+  return months;
+};
+ 
+const months = getPreviousMonths(isCalifornia ? 4 : 3);
+
+
+
 const handleSubmit = async () => {
   const store = useFormStore.getState();
-  const { one, two, three } = store.documentUpload;
 
-  if (!one || !two || !three) {
-    alert("Please upload all three bank statements");
+  const businessName = store.businessName?.name;
+  const { mode, finalSignature } = store.signature;
+  const { one, two, three, four } = store.documentUpload;
+
+  if (
+    !businessName ||
+    !one ||
+    !two ||
+    !three ||
+    (isCalifornia && !four)
+  ) {
+    alert("Missing required data");
     return;
   }
 
   try {
-    setIsUploading(true); 
+    setIsUploading(true);
 
-    //  Auth first
-    await signInWithGoogle();
+    const formData = new FormData();
+    formData.append("business_name", businessName);
 
-    //  Upload PDFs → URLs
-    const bank1Url = await uploadToDrive(one);
-    const bank2Url = await uploadToDrive(two);
-    const bank3Url = await uploadToDrive(three);
+    /* ======================
+       SIGNATURE HANDLING
+    ====================== */
 
-    //  Upload signature if drawn
-    let signatureUrl = null;
-    if (store.signature?.mode === "draw") {
-      const res = await fetch(store.signature.finalSignature);
-      const blob = await res.blob();
-      const file = new File([blob], "signature.png", {
-        type: "image/png",
+    let signatureFile;
+
+    if (mode === "draw" && finalSignature instanceof File) {
+      signatureFile = finalSignature;
+    } else {
+      // typed signature placeholder
+      signatureFile = new File(["typed"], "typed-signature.txt", {
+        type: "text/plain",
       });
-      signatureUrl = await uploadToDrive(file);
     }
 
-    //  Store URLs only
+ 
+    const files = [
+      signatureFile,
+      one,
+      two,
+      three,
+    ];
+
+    if (isCalifornia && four) {
+      files.push(four);
+    }
+
+    files.forEach((file) => {
+      formData.append("files", file);
+    });
+
+   
+    const response = await fetch(
+      "https://hook.us2.make.com/diw1njluv115mux5lcqnxyfzqgqiigfu",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    if (!response.ok) throw new Error("Upload failed");
+
+    const data = await response.json();
+
+    const signatureUrl = data?.["Signature URL"];
+    const bank1Url = data?.["Bank_Statement_1_URL"];
+    const bank2Url = data?.["Bank_Statement_2_URL"];
+    const bank3Url = data?.["Bank_Statement_3_URL"];
+    const bank4Url = data?.["Bank_Statement_4_URL"];
+    const imageId = data?.["Image_ID"];
+
+    
+
+    if (mode === "draw" && signatureUrl) {
+      setStepData("signature", {
+        finalSignature: signatureUrl,
+        Image_ID: imageId,
+      });
+    }
+
+    /* ======================
+       STORE DOCUMENT URLS
+    ====================== */
+
     setStepData("documentUpload", {
       one: bank1Url,
       two: bank2Url,
       three: bank3Url,
+      ...(isCalifornia && { four: bank4Url }),
     });
 
-    setStepData("signature", {
-      finalSignature:
-        store.signature?.mode === "type"
-          ? store.signature.finalSignature
-          : signatureUrl,
-    });
+    /* ======================
+       FINAL PAYLOAD
+    ====================== */
 
     await triggerCheckpoint("PAGE_15");
-
-    clearAll();
+    clearAll();  
     navigate("/apply/thank-you");
+
   } catch (err) {
-    console.error("Upload failed", err);
-    alert("Upload failed. Please try again.");
+    console.error(err);
+    alert("Submission failed. Please try again.");
   } finally {
-    setIsUploading(false); // 🔵 STOP LOADING
+    setIsUploading(false);
   }
 };
-
 
 
   const UploadBox = ({ label, fileKey }) => (
@@ -112,11 +174,11 @@ const handleSubmit = async () => {
       <label className="flex flex-col items-center justify-center gap-2 px-6 py-8 bg-blue-50 border border-dashed rounded-lg cursor-pointer hover:bg-blue-100 transition">
         <Upload className="w-6 h-6 text-blue-600" />
 
-        {documentUpload[fileKey] ? (
-          <span className="text-sm text-green-600 font-medium">
-            {documentUpload[fileKey].name}
-          </span>
-        ) : (
+        {documentUpload[fileKey] instanceof File ? (
+  <span className="text-sm text-green-600 font-medium">
+    {documentUpload[fileKey].name}
+  </span>
+) : (
           <span className="text-sm text-gray-600">
             Drag & drop PDF here or{" "}
             <span className="text-blue-600 underline">Choose file</span>
@@ -142,9 +204,13 @@ const handleSubmit = async () => {
         </h2>
 
         <div className="space-y-6 mt-8">
-          <UploadBox label="Bank Statement 1 *" fileKey="one" />
-          <UploadBox label="Bank Statement 2 *" fileKey="two" />
-          <UploadBox label="Bank Statement 3 *" fileKey="three" />
+         <UploadBox label={`Bank Statement of  ${months[0]} *`} fileKey="one" />
+<UploadBox label={`Bank Statement of ${months[1]} *`} fileKey="two" />
+<UploadBox label={`Bank Statement of ${months[2]} *`} fileKey="three" />
+
+{isCalifornia && (
+  <UploadBox label={`Bank Statement of ${months[3]} *`} fileKey="four" />
+)}
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 sm:justify-between mt-10">

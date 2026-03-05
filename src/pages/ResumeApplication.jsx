@@ -3,6 +3,11 @@
 import { Mail, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { STEP_TO_ROUTE } from "@/utils/stepToRoute";
+
+import { useFormStore } from "@/store";
+import { resumeApplicationByEmail  } from "@/services/applicationService";
+import { findResumeStep } from "@/utils/findResumeStep";
 import {
   CHECKPOINT_TO_ROUTE,
   LS_PROGRESS_KEY,
@@ -11,38 +16,61 @@ import {
 export default function ResumeApplication() {
   const navigate = useNavigate();
 
+  const { clearAll, hydrateFromBackend } = useFormStore();
+
+//   const route = STEP_TO_ROUTE[findResumeStep] || "/apply";
+// navigate(route);
+
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [notFound, setNotFound] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleResume = () => {
-  
-    if (!email.trim()) {
-      setError("Please enter your email address.");
-      return;
-    }
 
-   
-    const saved = JSON.parse(
-      localStorage.getItem(LS_PROGRESS_KEY) || "null"
-    );
 
-    if (!saved?.lastCheckpoint) {
+
+const handleResume = async () => {
+  if (!email.trim()) {
+    setError("Please enter your email address.");
+    return;
+  }
+
+  setLoading(true);
+  setNotFound(false);
+
+  try {
+    const payload = await resumeApplicationByEmail(email);
+
+    if (payload?.found === false) {
       setNotFound(true);
       return;
     }
 
-  
-    const route =
-      CHECKPOINT_TO_ROUTE[saved.lastCheckpoint] || "/apply";
+    if (payload?.found === true) {
+      clearAll();
+      hydrateFromBackend(payload.fields); // ✅ FIXED
 
-    navigate(route);
-  };
+      // allow Zustand to update before navigation
+      setTimeout(() => {
+        const step = findResumeStep();
+        const route = STEP_TO_ROUTE[step] || "/apply";
+         navigate(route);
+      }, 0);
+
+      return;
+    }
+  } catch (err) {
+    console.error(err);
+    setNotFound(true);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-24 px-4">
       <div className="w-full max-w-2xl bg-white shadow-lg border border-gray-100 rounded-3xl p-10">
-        {/* Icon + Header */}
+        {/* Header */}
         <div className="flex flex-col items-center text-center mb-8">
           <div className="w-14 h-14 flex items-center justify-center bg-blue-50 rounded-lg mb-4">
             <Mail className="w-8 h-8 text-blue-600" />
@@ -79,53 +107,52 @@ export default function ResumeApplication() {
             />
           </div>
 
-          {/* Helper / Error Message */}
           <p
             className={`text-xs mt-2 ${
               error ? "text-red-500" : "text-gray-400"
             }`}
           >
-            {error
-              ? error
-              : "We'll search for your saved application using this email."}
+            {error ||
+              "We'll search for your saved application using this email."}
           </p>
         </div>
 
         {/* Buttons */}
         {!notFound && (
-        <div className="flex justify-between items-center border-t pt-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back
-          </button>
+          <div className="flex justify-between items-center border-t pt-6">
+            <button
+              onClick={() => navigate(-1)}
+              className="flex items-center gap-2 text-blue-600 border border-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </button>
 
-          <button
-            onClick={handleResume}
-            disabled={!email.trim()}
-            className={`px-8 py-3 rounded-lg shadow-md transition
-              ${
-                email.trim()
-                  ? "bg-blue-600 text-white hover:bg-blue-700"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }
-            `}
-          >
-            Find My Application
-          </button>
-        </div>
+            <button
+              onClick={handleResume}
+              disabled={!email.trim() || loading}
+              className={`px-8 py-3 rounded-lg shadow-md transition
+                ${
+                  email.trim() && !loading
+                    ? "bg-blue-600 text-white hover:bg-blue-700"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }
+              `}
+            >
+              {loading ? "Searching..." : "Find My Application"}
+            </button>
+          </div>
         )}
+
         {/* Application Not Found */}
         {notFound && (
           <div className="mt-6 p-5 border border-yellow-200 bg-yellow-50 rounded-xl text-sm">
             <p className="mb-3 text-gray-800 font-medium">
-              We couldn’t find an application saved on this device.
+              We couldn’t find an application with this email.
             </p>
 
             <p className="mb-4 text-gray-600">
-              You can start a new application or cancel and try another email.
+              You can start a new application or try another email.
             </p>
 
             <div className="flex gap-3">
