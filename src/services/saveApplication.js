@@ -35,8 +35,10 @@ export async function saveApplication(payload) {
       },
       body: JSON.stringify(payload),
       keepalive: true,
-    });
-  } catch (err) {
-    console.error("Autosave failed", err);
-  }
-}
+     });
+   } catch (err) {
+     console.error("Autosave failed", err);
+   }
+ }
+
+

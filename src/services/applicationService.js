@@ -1,6 +1,6 @@
 
 
-// const BASE_URL = "/api";
+ const BASE_URL = "/api";
 
 
 // export async function resumeApplicationByEmail(email) {
@@ -31,14 +31,14 @@
 export async function resumeApplicationByEmail(email) {
   const url = `https://magnetarsolutions.pythonanywhere.com/api/resume?email=${encodeURIComponent(email)}`;
 
-  const res = await fetch(url, {
-    method: "GET",
-    headers: {
-       "ngrok-skip-browser-warning": "true", // Keep this for PythonAnywhere/Ngrok
-    },
-  });
+   const res = await fetch(url, {
+     method: "GET",
+     // headers: {
+     //   "ngrok-skip-browser-warning": "true",
+     // },
+   });
 
-  if (!res.ok) return null;
+   if (!res.ok) return null;
 
   return res.json();
 }
