@@ -31,7 +31,10 @@ const flatPayload = buildPayload(store, slicesToSend);
 
 const owners = [];
 
-if (store.businessOwner?.["Business Owner First Name"]) {
+if (
+  store.businessOwner?.["Business Owner Phone Number"] ||
+  store.businessOwner?.["Business Owner Email Address"]
+) {
   owners.push({
    // first_name: store.businessOwner["Business Owner First Name"],
    // last_name: store.businessOwner["Business Owner Last Name"],
@@ -75,10 +78,7 @@ const finalPayload = {
     ...(owners.length > 0 && { business_owners: owners }),
   },
 };
-  // console.group(`🚀 ${checkpointName} (CUMULATIVE PAYLOAD)`);
-  // console.log(finalPayload);
-  // console.groupEnd();
-
+  
   try {
     
     const response = await fetch(WEBHOOK_URL, {
