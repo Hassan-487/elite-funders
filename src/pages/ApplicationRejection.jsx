@@ -51,7 +51,7 @@ export default function ApplicationRejection() {
           </p>
           <p>
             Simply reply to this email or call us at{" "}
-            <span className="font-medium text-gray-700">(888) 343-1156</span>.
+            <span className="font-medium text-gray-700">888-896-5559</span>.
             We’re here to help.
           </p>
         </div>

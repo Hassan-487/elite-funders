@@ -29,7 +29,7 @@ export const STEP_REQUIRED_FIELDS = {
   businessName: ["name"],
   aboutYourself: ["firstName", "lastName", "email", "phone"],
   businessDetails: ["address", "city", "state", "zip"],
-  businessOwner: ["name", "ownershipPercentage", "dob", "ssnLast4"],
+  businessOwner: [ "ownershipPercentage", "dob", "ssnLast4"],
   signature: ["finalSignature"],
 };
 

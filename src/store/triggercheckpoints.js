@@ -33,8 +33,8 @@ const owners = [];
 
 if (store.businessOwner?.["Business Owner First Name"]) {
   owners.push({
-    first_name: store.businessOwner["Business Owner First Name"],
-    last_name: store.businessOwner["Business Owner Last Name"],
+   // first_name: store.businessOwner["Business Owner First Name"],
+   // last_name: store.businessOwner["Business Owner Last Name"],
     phone: store.businessOwner["Business Owner Phone Number"],
     email: store.businessOwner["Business Owner Email Address"],
     street_address: store.businessOwner["Business Owner Street Address"],

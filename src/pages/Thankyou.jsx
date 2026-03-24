@@ -185,7 +185,7 @@ export default function ThankYou() {
           <div className="text-sm text-gray-700 space-y-1">
             <p className="flex justify-center items-center gap-2">
               <Phone className="w-4 h-4 text-blue-600" />
-              (888) 343-1156
+              888-896-5559
             </p>
 
             <p className="flex justify-center items-center gap-2">

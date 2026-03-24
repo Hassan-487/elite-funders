@@ -53,7 +53,7 @@ export const PAYLOAD_SCHEMA = {
 
 
   businessDetails: {
-    businessName: { key: "Business Name" },
+    //businessName: { key: "Business Name" },
     email: { key: "Email Address" },
     phone: { key: "Phone Number" },
     address: { key: "Street Address" },
