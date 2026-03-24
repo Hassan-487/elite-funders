@@ -23,7 +23,7 @@ export default function PersonalCreditScoreStep() {
   const options = [
     { label: "Excellent (720+)", icon: BadgeCheck },
     { label: "Great (680-719)", icon: Star },
-    { label: "Good (640-679)", icon: ThumbsUp },
+    { label: "Good (680-719)", icon: ThumbsUp },
     { label: "Fair (600-639)", icon: Minus },
     { label: "Low (550-599)", icon: AlertTriangle },
     { label: "Poor (Below 550)", icon: AlertCircle },
