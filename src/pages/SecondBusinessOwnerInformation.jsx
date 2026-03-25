@@ -321,7 +321,7 @@ try {
   }
 
   // ✅ All validations passed
-  triggerCheckpoint("PAGE_13");
+  //triggerCheckpoint("PAGE_13");
   navigate("/apply/signature");
 
 } catch (err) {

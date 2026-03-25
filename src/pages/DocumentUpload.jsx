@@ -54,11 +54,121 @@ const months = getPreviousMonths(isCalifornia ? 4 : 3);
 
 
 
+// const handleSubmit = async () => {
+//   const store = useFormStore.getState();
+
+//   const businessName = store.businessName?.name;
+//   const { mode, finalSignature } = store.signature;
+//   const { one, two, three, four } = store.documentUpload;
+
+//   if (
+//     !businessName ||
+//     !one ||
+//     !two ||
+//     !three ||
+//     (isCalifornia && !four)
+//   ) {
+//     alert("Missing required data");
+//     return;
+//   }
+
+//   try {
+//     setIsUploading(true);
+
+//     const formData = new FormData();
+//     formData.append("business_name", businessName);
+
+//     /* ======================
+//        SIGNATURE HANDLING
+//     ====================== */
+
+//     let signatureFile;
+
+//     if (mode === "draw" && finalSignature instanceof File) {
+//       signatureFile = finalSignature;
+//     } else {
+//       // typed signature placeholder
+//       signatureFile = new File(["typed"], "typed-signature.txt", {
+//         type: "text/plain",
+//       });
+//     }
+
+ 
+//     const files = [
+//       signatureFile,
+//       one,
+//       two,
+//       three,
+//     ];
+
+//     if (isCalifornia && four) {
+//       files.push(four);
+//     }
+
+//     files.forEach((file) => {
+//       formData.append("files", file);
+//     });
+
+   
+//     const response = await fetch(
+//       "https://hook.us2.make.com/diw1njluv115mux5lcqnxyfzqgqiigfu",
+//       {
+//         method: "POST",
+//         body: formData,
+//       }
+//     );
+
+//     if (!response.ok) throw new Error("Upload failed");
+
+//     const data = await response.json();
+
+//     const signatureUrl = data?.["Signature URL"];
+//     const bank1Url = data?.["Bank_Statement_1_URL"];
+//     const bank2Url = data?.["Bank_Statement_2_URL"];
+//     const bank3Url = data?.["Bank_Statement_3_URL"];
+//     const bank4Url = data?.["Bank_Statement_4_URL"];
+//     const imageId = data?.["Image_ID"];
+
+    
+
+//     if (mode === "draw" && signatureUrl) {
+//       setStepData("signature", {
+//         finalSignature: signatureUrl,
+//         Image_ID: imageId,
+//       });
+//     }
+
+//     /* ======================
+//        STORE DOCUMENT URLS
+//     ====================== */
+
+//     setStepData("documentUpload", {
+//       one: bank1Url,
+//       two: bank2Url,
+//       three: bank3Url,
+//       ...(isCalifornia && { four: bank4Url }),
+//     });
+
+//     /* ======================
+//        FINAL PAYLOAD
+//     ====================== */
+
+//     await triggerCheckpoint("PAGE_15");
+//     clearAll();  
+//     navigate("/apply/thank-you");
+
+//   } catch (err) {
+//     console.error(err);
+//     alert("Submission failed. Please try again.");
+//   } finally {
+//     setIsUploading(false);
+//   }
+// };
+
 const handleSubmit = async () => {
   const store = useFormStore.getState();
-
+const { mode } = store.signature || {};
   const businessName = store.businessName?.name;
-  const { mode, finalSignature } = store.signature;
   const { one, two, three, four } = store.documentUpload;
 
   if (
@@ -77,29 +187,8 @@ const handleSubmit = async () => {
 
     const formData = new FormData();
     formData.append("business_name", businessName);
-
-    /* ======================
-       SIGNATURE HANDLING
-    ====================== */
-
-    let signatureFile;
-
-    if (mode === "draw" && finalSignature instanceof File) {
-      signatureFile = finalSignature;
-    } else {
-      // typed signature placeholder
-      signatureFile = new File(["typed"], "typed-signature.txt", {
-        type: "text/plain",
-      });
-    }
-
- 
-    const files = [
-      signatureFile,
-      one,
-      two,
-      three,
-    ];
+     formData.append("signature_mode", mode);
+    const files = [one, two, three];
 
     if (isCalifornia && four) {
       files.push(four);
@@ -109,7 +198,7 @@ const handleSubmit = async () => {
       formData.append("files", file);
     });
 
-   
+    // ✅ ONLY DOCUMENTS API
     const response = await fetch(
       "https://hook.us2.make.com/diw1njluv115mux5lcqnxyfzqgqiigfu",
       {
@@ -122,39 +211,19 @@ const handleSubmit = async () => {
 
     const data = await response.json();
 
-    const signatureUrl = data?.["Signature URL"];
-    const bank1Url = data?.["Bank_Statement_1_URL"];
-    const bank2Url = data?.["Bank_Statement_2_URL"];
-    const bank3Url = data?.["Bank_Statement_3_URL"];
-    const bank4Url = data?.["Bank_Statement_4_URL"];
-    const imageId = data?.["Image_ID"];
-
-    
-
-    if (mode === "draw" && signatureUrl) {
-      setStepData("signature", {
-        finalSignature: signatureUrl,
-        Image_ID: imageId,
-      });
-    }
-
-    /* ======================
-       STORE DOCUMENT URLS
-    ====================== */
-
     setStepData("documentUpload", {
-      one: bank1Url,
-      two: bank2Url,
-      three: bank3Url,
-      ...(isCalifornia && { four: bank4Url }),
+      one: data?.["Bank_Statement_1_URL"],
+      two: data?.["Bank_Statement_2_URL"],
+      three: data?.["Bank_Statement_3_URL"],
+      ...(isCalifornia && {
+        four: data?.["Bank_Statement_4_URL"],
+      }),
     });
 
-    /* ======================
-       FINAL PAYLOAD
-    ====================== */
-
+    // ✅ FINAL PAYLOAD WITH DOC URLS
     await triggerCheckpoint("PAGE_15");
-    clearAll();  
+
+    clearAll();
     navigate("/apply/thank-you");
 
   } catch (err) {
@@ -164,8 +233,6 @@ const handleSubmit = async () => {
     setIsUploading(false);
   }
 };
-
-
   const UploadBox = ({ label, fileKey }) => (
     
     <div className="space-y-2">

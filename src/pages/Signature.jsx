@@ -56,34 +56,137 @@ export default function Signature() {
  
 
 
+// const handleNext = async () => {
+//   try {
+//     if (!typedName && !drawnSignature) return;
+
+//     let finalSignature = null;
+
+//     if (mode === "type" && typedName.trim()) {
+//       finalSignature = typedName.trim();
+//     }
+
+//     if (mode === "draw" && drawnSignature) {
+//       const file = base64ToFile(
+//         drawnSignature,
+//         `signature_${Date.now()}.png`
+//       );
+
+//       finalSignature = file; // store File
+//     }
+
+//     setStepData("signature", {
+//       mode,
+//       typedName: typedName || null,
+//       drawnSignature: drawnSignature || null,
+//       finalSignature,
+//     });
+
+//     // ❌ REMOVE THIS
+//     // await triggerCheckpoint("PAGE_14");
+
+//     navigate("/apply/doc-upload");
+
+//   } catch (err) {
+//     console.error("Signature processing failed:", err);
+//   }
+// };
+
 const handleNext = async () => {
   try {
     if (!typedName && !drawnSignature) return;
 
-    let finalSignature = null;
-
-    if (mode === "type" && typedName.trim()) {
-      finalSignature = typedName.trim();
-    }
+    let signatureFile = null;
 
     if (mode === "draw" && drawnSignature) {
-      const file = base64ToFile(
+      signatureFile = base64ToFile(
         drawnSignature,
         `signature_${Date.now()}.png`
       );
-
-      finalSignature = file; // store File
     }
 
+    let signatureUrl = null;
+    let imageId = null;
+
+    /* =========================
+       🔥 ONLY CALL API FOR DRAW
+    ========================= */
+if (mode === "draw") {
+  const store = useFormStore.getState();
+  const businessName = store.businessName?.name;
+
+  if (!businessName) {
+    alert("Business name missing");
+    return;
+  }
+
+  /* =========================
+     ENSURE SIGNATURE EXISTS
+  ========================= */
+  let fileToUpload = signatureFile;
+
+  if (!fileToUpload && sigRef.current && !sigRef.current.isEmpty()) {
+    const base64 = sigRef.current.toDataURL();
+    fileToUpload = base64ToFile(
+      base64,
+      `signature_${Date.now()}.png`
+    );
+  }
+
+  if (!fileToUpload) {
+    alert("Please draw signature");
+    return;
+  }
+
+  /* =========================
+     EXACT SAME AS DOC FLOW
+  ========================= */
+  const formData = new FormData();
+
+  formData.append("business_name", businessName);
+
+  // ✅ SAME PATTERN AS DOC PAGE
+  formData.append("files", fileToUpload);
+
+  console.log("🚀 Sending signature like documents flow");
+
+  const response = await fetch(
+    "https://hook.us2.make.com/diw1njluv115mux5lcqnxyfzqgqiigfu",
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  if (!response.ok) {
+    const text = await response.text();
+    console.error("❌ Upload failed:", text);
+    throw new Error("Signature upload failed");
+  }
+
+  const data = await response.json();
+
+  console.log("✅ Signature response:", data);
+
+  signatureUrl = data?.["Image URL"];
+  imageId = data?.["Image ID"];
+}  
+
+    /* =========================
+       STORE IN ZUSTAND
+    ========================= */
     setStepData("signature", {
       mode,
       typedName: typedName || null,
       drawnSignature: drawnSignature || null,
-      finalSignature,
+      finalSignature: signatureUrl || typedName,
+      Image_ID: imageId || null,
     });
 
-    // ❌ REMOVE THIS
-    // await triggerCheckpoint("PAGE_14");
+    /* =========================
+       NOW SEND PAYLOAD
+    ========================= */
+    await triggerCheckpoint("PAGE_14");
 
     navigate("/apply/doc-upload");
 
@@ -91,7 +194,6 @@ const handleNext = async () => {
     console.error("Signature processing failed:", err);
   }
 };
-
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center pt-20 px-4 pb-40">
