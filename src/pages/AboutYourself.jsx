@@ -272,9 +272,23 @@ const handleNext = async () => {
 />
             <span>
               I agree to receive text messages and accept the{" "}
-              <span className="text-blue-600 underline">Terms of Service</span>{" "}
+              <a 
+                href="https://elitefunders.com/terms-of-service" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-blue-600 underline hover:text-blue-800 transition"
+              >
+                Terms of Service
+              </a>{" "}
               and{" "}
-              <span className="text-blue-600 underline">Privacy Policy</span>.
+              <a 
+                href="https://elitefunders.com/privacy-policy" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-blue-600 underline hover:text-blue-800 transition"
+              >
+                Privacy Policy
+              </a>.
             </span>
           </label>
         </div>

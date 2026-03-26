@@ -23,21 +23,21 @@ export default function ApplicationRejection() {
         {/* Links */}
         <div className="flex flex-col gap-3 pt-2">
           <a
-            href="#"
+            href="https://lowcreditfinance.com/?aff45015"
             className="text-blue-600 font-medium hover:underline"
           >
             Low Credit Finance – up to $5k for lower credit profiles
           </a>
 
           <a
-            href="#"
+            href="https://superpersonalfinder.com/?aff45007"
             className="text-blue-600 font-medium hover:underline"
           >
             Super Personal Finder – personal loans up to $50k
           </a>
 
           <a
-            href="#"
+            href="https://loanraptor.net/?aff45005"
             className="text-blue-600 font-medium hover:underline"
           >
             LoanRaptor – same-day approvals for working-capital loans
